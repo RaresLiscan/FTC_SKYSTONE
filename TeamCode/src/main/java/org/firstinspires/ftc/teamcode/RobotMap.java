@@ -18,6 +18,7 @@ public class RobotMap {
     public DcMotor dreaptaFata = null;
     public DcMotor dreaptaSpate = null;
     public DcMotor ridicareBratStanga = null;
+    public DcMotor ridicareBratDreapta = null;
     public DcMotor scripeteStanga = null;
     public DcMotor scripeteDreapta = null;
     public Servo gheara = null;
@@ -32,12 +33,17 @@ public class RobotMap {
         stangaSpate = hardwareMap.get(DcMotor.class, "stangaSpate");
         dreaptaSpate = hardwareMap.get(DcMotor.class, "dreaptaSpate");
         scripeteStanga = hardwareMap.get(DcMotor.class, "scripeteStanga");
+        scripeteDreapta = hardwareMap.get(DcMotor.class, "scripeteDreapta");
         ridicareBratStanga = hardwareMap.get(DcMotor.class, "ridicareBratStanga");
+        ridicareBratDreapta = hardwareMap.get(DcMotor.class, "ridicareBratDreapta");
 //        scripeteSlide = hardwareMap.get(DcMotor.class, "scripeteSlide");
         gheara = hardwareMap.get(Servo.class, "gheara");
         gheara.setPosition(0.5);
         stangaSpate.setDirection(DcMotor.Direction.REVERSE);
         stangaFata.setDirection(DcMotor.Direction.REVERSE);
+
+        ridicareBratStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ridicareBratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -62,6 +68,25 @@ public class RobotMap {
         stangaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void basculareStanga (int ticks, double power, int timeout) {
+
+        ElapsedTime runtime = new ElapsedTime();
+
+        ridicareBratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        ridicareBratStanga.setTargetPosition(ticks);
+
+        ridicareBratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        ridicareBratStanga.setPower(power);
+        runtime.reset();
+
+        while (ridicareBratStanga.isBusy() && runtime.seconds() < timeout);
+
+        ridicareBratStanga.setPower(0);
+
     }
 
     public void runUsingEncoders (int distance, double power, double timeout) {
@@ -207,6 +232,61 @@ public class RobotMap {
         lastAngles = angles;
 
         return globalAngle;
+    }
+
+
+    public void rotate(int degrees, double power, int timeout)
+    {
+        double  leftPower, rightPower;
+
+        ElapsedTime runtime = new ElapsedTime();
+
+        // restart imu movement tracking.
+        resetAngle();
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees < 0)
+        {   // turn right.
+            leftPower = power;
+            rightPower = -power;
+        }
+        else if (degrees > 0)
+        {   // turn left.
+            leftPower = -power;
+            rightPower = power;
+        }
+        else return;
+
+        // set power to rotate.
+        stangaFata.setPower(leftPower);
+        stangaSpate.setPower(leftPower);
+        dreaptaSpate.setPower(rightPower);
+        dreaptaFata.setPower(rightPower);
+//        leftMotor.setPower(leftPower);
+//        rightMotor.setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0)
+        {
+            // On right turn we have to get off zero first.
+            while (getAngle() == 0) {}
+
+            while (getAngle() > degrees) {}
+        }
+        else    // left turn.
+            while (getAngle() < degrees) {}
+
+        // turn the motors off.
+        stopDriving();
+//        rightMotor.setPower(0);
+//        leftMotor.setPower(0);
+
+        // wait for rotation to stop.
+
+        // reset angle tracking on new heading.
+        resetAngle();
     }
 
 }

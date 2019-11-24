@@ -102,8 +102,8 @@ public class EncoderIMU extends LinearOpMode
             telemetry.update();
 
             double rotate = -gamepad1.left_stick_x * 0.7;
-            double strafe = gamepad1.right_stick_x * 0.45 - correction;
-            double forward = gamepad1.left_stick_y * 0.45;
+            double strafe = gamepad1.right_stick_x * 0.35;
+            double forward = gamepad1.left_stick_y * 0.65;
             //double diagonal =
 
             double sS = -strafe + forward - rotate;

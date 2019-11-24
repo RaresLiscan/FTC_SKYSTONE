@@ -16,13 +16,17 @@ public class BlueAutonomous extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
 
-            robot.raiseServo(1000, 0.4, 10);
-            robot.strafe(2000, 0.65, 4);
-            robot.runUsingEncoders(2000, 0.5, 4);
-            robot.gheara.setPosition(1);
-            robot.runUsingEncoders(-500, 0.5, 4);
-            robot.strafe(8000, 0.65, 10);
-            robot.runUsingEncoders(500, 0.3, 3);
+//            robot.raiseServo(1000, 0.4, 10);
+//            robot.strafe(2000, 0.65, 4);
+//            robot.runUsingEncoders(2000, 0.5, 4);
+//            robot.gheara.setPosition(1);
+//            robot.runUsingEncoders(-500, 0.5, 4);
+//            robot.strafe(8000, 0.65, 10);
+//            robot.runUsingEncoders(500, 0.3, 3);
+
+            robot.rotate(100, 0.3, 5);
+
+//            robot.strafe(1000, 0.55, 5);
 
         }
 
