@@ -5,16 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp (name="PunkOP")
+@TeleOp (name="TeleOP Bistrita")
 public class TestTeleOP extends LinearOpMode {
 
     RobotMap robot = null;
 
     private void basculare (int ticks, double power, DcMotor motor) {
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setTargetPosition(ticks);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(power);
+        if (ticks < 0) motor.setPower(-power);
+        else motor.setPower(power);
     }
 
     @Override
@@ -27,57 +25,107 @@ public class TestTeleOP extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            /** GAMEPAD 1 */
 
             //Miscarea sasiului
-            double rotate = -gamepad1.left_stick_x * 0.45;
-            double strafe = gamepad1.right_stick_x * 0.7;
-            double forward = gamepad1.left_stick_y * 0.45;
-            //double diagonal =
+            double rotate = -gamepad1.right_stick_x;
+            double strafe =  gamepad1.left_stick_x;
+            double forward = gamepad1.left_stick_y;
 
-            double sS = -strafe + forward - rotate;
-            double dF = strafe + forward  -rotate;
-            double sF = -strafe + forward + rotate;
-            double dS = strafe + forward + rotate;
+            double sS = -strafe - forward - rotate;
+            double dF =  strafe + forward - rotate;
+            double sF =  strafe - forward - rotate;
+            double dS = -strafe + forward - rotate;
 
             robot.stangaSpate.setPower(sS);
             robot.dreaptaFata.setPower(dF);
             robot.stangaFata.setPower(sF);
             robot.dreaptaSpate.setPower(dS);
 
-            robot.scripeteStanga.setPower(gamepad2.left_stick_y * 0.7);
-            robot.scripeteDreapta.setPower(gamepad2.right_stick_y * 0.7);
+
+
+            //Ridicarea scripetelui
+            robot.ridicareBratDreapta.setPower(-gamepad1.right_stick_y * 0.7);
+
+
+            //Ridicarea scripetelui din dreapta
+            double raisePower = 0.7;
+            int ticks = 1440;
+            if (gamepad1.right_trigger != 0) {
+                robot.scripeteDreapta.setPower(raisePower);
+            }
+            else if (gamepad1.right_bumper) {
+                robot.scripeteDreapta.setPower(-raisePower);
+            }
+            else robot.scripeteDreapta.setPower(0);
 
 
             //Prinderea mineralului
-            if (gamepad2.right_bumper){
-                robot.gheara.setPosition(1);
+            if (gamepad1.a) {
+                robot.ghearaDreapta.setPosition(0.5);
             }
-            else if (gamepad2.left_bumper){
-                robot.gheara.setPosition(0.5);
+            else if (gamepad1.y) {
+                robot.ghearaDreapta.setPosition(1);
             }
 
-            //Basculare bazata pe encodere
-            double raisePower = 0.2;
-            int ticks = 1440;
-            //Pentru bratul din stanga
-            if (gamepad2.dpad_down) {
-                basculare(ticks, raisePower, robot.ridicareBratStanga);
+            //Ridicarea scripetelui din stanga
+            if (gamepad1.left_bumper) {
+                robot.scripeteStanga.setPower(-raisePower);
             }
-            else if (gamepad2.dpad_up) {
-                basculare(-ticks, raisePower, robot.ridicareBratStanga);
+            else if (gamepad1.left_trigger != 0) {
+                robot.scripeteStanga.setPower(raisePower);
             }
-            if (robot.ridicareBratStanga.getPower() == 0 && robot.ridicareBratStanga.isBusy()) {
-                robot.ridicareBratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            else robot.scripeteStanga.setPower(0);
+
+
+            //Prinderea capstone-ului
+            if (gamepad1.dpad_down) {
+                robot.ghearaStanga.setPosition(0.5);
             }
-            //Pentru bratul din dreapta
+            if (gamepad1.dpad_up) {
+                robot.ghearaStanga.setPosition(0);
+            }
+
+
+            /** GAMEPAD 2 */
+
+
+            //Bascularea bratelor
+            robot.ridicareBratDreapta.setPower(-gamepad2.right_stick_y);
+            robot.ridicareBratStanga.setPower(-gamepad2.left_stick_y);
+
+            //Ridicarea scripetelui pentru bratul din dreapta
+            if (gamepad2.right_trigger != 0) {
+                robot.scripeteDreapta.setPower(raisePower);
+            }
+            else if (gamepad2.right_bumper) {
+                robot.scripeteDreapta.setPower(-raisePower);
+            }
+            else robot.scripeteDreapta.setPower(0);
+
+            //Ridicarea scripetelui pentru bratul din stanga
+            if (gamepad2.left_bumper) {
+                robot.scripeteStanga.setPower(-raisePower);
+            }
+            else if (gamepad2.left_trigger != 0) {
+                robot.scripeteStanga.setPower(raisePower);
+            }
+            else robot.scripeteStanga.setPower(0);
+
+
+            //Prinderea mineralului pentru bratul din dreapta
             if (gamepad2.a) {
-                basculare(-ticks, raisePower, robot.ridicareBratDreapta);
+                robot.ghearaDreapta.setPosition(0.5);
             }
             else if (gamepad2.y) {
-                basculare(ticks, raisePower, robot.ridicareBratDreapta);
+                robot.ghearaDreapta.setPosition(1);
             }
-            if (robot.ridicareBratDreapta.getPower() == 0 && robot.ridicareBratDreapta.isBusy()) {
-                robot.ridicareBratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //Prinderea de capstone
+            if (gamepad2.dpad_up) {
+                robot.ghearaStanga.setPosition(0);
+            }
+            else if (gamepad2.dpad_down) {
+                robot.ghearaStanga.setPosition(0.5);
             }
 
         }

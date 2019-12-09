@@ -63,8 +63,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-//@Disabled
+@TeleOp(name = "Detectare cu tensorflow")
+@Disabled
 public class AutonomousTest extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -97,11 +97,11 @@ public class AutonomousTest extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
-    private RobotMap robot = null;
+//    private RobotMap robot = null;
 
-    private void skystoneDetected() {
-        robot.runUsingEncoders(1120, 0.4, 10);
-    }
+//    private void skystoneDetected() {
+//        robot.runUsingEncoders(1120, 0.4, 10);
+//    }
 
 
     private static final float mmPerInch        = 25.4f;
@@ -318,7 +318,7 @@ public class AutonomousTest extends LinearOpMode {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
 //        initVuforia();
-        robot = new RobotMap(hardwareMap);
+//        robot = new RobotMap(hardwareMap);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
@@ -401,30 +401,30 @@ public class AutonomousTest extends LinearOpMode {
 
                     //Robot control
 
-                    double rotate = gamepad1.right_stick_x * 0.35;
-                    double strafe = gamepad1.left_stick_x * 0.65;
-                    double forward = -gamepad1.left_stick_y * 0.35;
-
-                    double dF, dS, sS, sF;
-
-
-                    if (Math.abs(forward) >= Math.abs(strafe)) {
-                        sS = forward + rotate;
-                        dF = -forward + rotate;
-                        sF = forward + rotate;
-                        dS = -forward + rotate;
-                    } else {
-                        sS = -strafe + rotate;
-                        dF = strafe + rotate;
-                        sF = strafe + rotate;
-                        dS = -strafe + rotate;
-                    }
-
-
-                    robot.stangaSpate.setPower(sS);
-                    robot.dreaptaFata.setPower(dF);
-                    robot.stangaFata.setPower(sF);
-                    robot.dreaptaSpate.setPower(dS);
+//                    double rotate = gamepad1.right_stick_x * 0.35;
+//                    double strafe = gamepad1.left_stick_x * 0.65;
+//                    double forward = -gamepad1.left_stick_y * 0.35;
+//
+//                    double dF, dS, sS, sF;
+//
+//
+//                    if (Math.abs(forward) >= Math.abs(strafe)) {
+//                        sS = forward + rotate;
+//                        dF = -forward + rotate;
+//                        sF = forward + rotate;
+//                        dS = -forward + rotate;
+//                    } else {
+//                        sS = -strafe + rotate;
+//                        dF = strafe + rotate;
+//                        sF = strafe + rotate;
+//                        dS = -strafe + rotate;
+//                    }
+//
+//
+//                    robot.stangaSpate.setPower(sS);
+//                    robot.dreaptaFata.setPower(dF);
+//                    robot.stangaFata.setPower(sF);
+//                    robot.dreaptaSpate.setPower(dS);
                 }
             }
         }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -21,10 +22,11 @@ public class RobotMap {
     public DcMotor ridicareBratDreapta = null;
     public DcMotor scripeteStanga = null;
     public DcMotor scripeteDreapta = null;
-    public Servo gheara = null;
+    public Servo ghearaDreapta = null;
+    public Servo ghearaStanga = null;
     public BNO055IMU imu = null;
-    Orientation             lastAngles = new Orientation();
-    double                  globalAngle, correction;
+    Orientation lastAngles = new Orientation();
+    double globalAngle, correction;
 
 
     public RobotMap (HardwareMap hardwareMap) {
@@ -36,14 +38,8 @@ public class RobotMap {
         scripeteDreapta = hardwareMap.get(DcMotor.class, "scripeteDreapta");
         ridicareBratStanga = hardwareMap.get(DcMotor.class, "ridicareBratStanga");
         ridicareBratDreapta = hardwareMap.get(DcMotor.class, "ridicareBratDreapta");
-//        scripeteSlide = hardwareMap.get(DcMotor.class, "scripeteSlide");
-        gheara = hardwareMap.get(Servo.class, "gheara");
-        gheara.setPosition(0.5);
-        stangaSpate.setDirection(DcMotor.Direction.REVERSE);
-        stangaFata.setDirection(DcMotor.Direction.REVERSE);
-
-        ridicareBratStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ridicareBratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ghearaDreapta = hardwareMap.get(Servo.class, "ghearaDreapta");
+        ghearaStanga = hardwareMap.get(Servo.class, "ghearaStanga");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -61,6 +57,13 @@ public class RobotMap {
 
 //        telemetry.addData("Mode", "calibrating...");
 //        telemetry.update();
+    }
+
+    public void runMotors (double sF, double sS, double dF, double dS) {
+        stangaFata.setPower(sF);
+        stangaSpate.setPower(sS);
+        dreaptaSpate.setPower(dS);
+        dreaptaFata.setPower(dF);
     }
 
     public void zeroPowerBeh() {
@@ -87,6 +90,12 @@ public class RobotMap {
 
         ridicareBratStanga.setPower(0);
 
+    }
+
+    public int cmToTicks (double distance) {
+        //Distance is in cm
+        double wheelDiameter = 10, gearRatio = 2, motorTicks = 1120;
+        return (int) (distance / (wheelDiameter * Math.PI) * motorTicks * gearRatio);
     }
 
     public void runUsingEncoders (int distance, double power, double timeout) {
@@ -239,6 +248,12 @@ public class RobotMap {
     {
         double  leftPower, rightPower;
 
+        stangaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
         ElapsedTime runtime = new ElapsedTime();
 
         // restart imu movement tracking.
@@ -251,19 +266,21 @@ public class RobotMap {
         {   // turn right.
             leftPower = power;
             rightPower = -power;
+//            power = -power;
         }
         else if (degrees > 0)
         {   // turn left.
             leftPower = -power;
             rightPower = power;
+            power = -power;
         }
         else return;
 
         // set power to rotate.
-        stangaFata.setPower(leftPower);
-        stangaSpate.setPower(leftPower);
-        dreaptaSpate.setPower(rightPower);
-        dreaptaFata.setPower(rightPower);
+        stangaFata.setPower(power);
+        stangaSpate.setPower(power);
+        dreaptaSpate.setPower(power);
+        dreaptaFata.setPower(power);
 //        leftMotor.setPower(leftPower);
 //        rightMotor.setPower(rightPower);
 

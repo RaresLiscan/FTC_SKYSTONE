@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name="BlueAutonomous")
+@Disabled
 public class BlueAutonomous extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -25,6 +27,7 @@ public class BlueAutonomous extends LinearOpMode {
 //            robot.runUsingEncoders(500, 0.3, 3);
 
             robot.rotate(100, 0.3, 5);
+
 
 //            robot.strafe(1000, 0.55, 5);
 
