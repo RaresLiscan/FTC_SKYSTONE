@@ -39,7 +39,9 @@ public class RobotMap {
         ridicareBratStanga = hardwareMap.get(DcMotor.class, "ridicareBratStanga");
         ridicareBratDreapta = hardwareMap.get(DcMotor.class, "ridicareBratDreapta");
         ghearaDreapta = hardwareMap.get(Servo.class, "ghearaDreapta");
+        ghearaDreapta.setPosition(1);
         ghearaStanga = hardwareMap.get(Servo.class, "ghearaStanga");
+        ghearaStanga.setPosition(0);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -73,24 +75,6 @@ public class RobotMap {
         dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void basculareStanga (int ticks, double power, int timeout) {
-
-        ElapsedTime runtime = new ElapsedTime();
-
-        ridicareBratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        ridicareBratStanga.setTargetPosition(ticks);
-
-        ridicareBratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        ridicareBratStanga.setPower(power);
-        runtime.reset();
-
-        while (ridicareBratStanga.isBusy() && runtime.seconds() < timeout);
-
-        ridicareBratStanga.setPower(0);
-
-    }
 
     public int cmToTicks (double distance) {
         //Distance is in cm
@@ -126,6 +110,71 @@ public class RobotMap {
         while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout);
 
         stopDriving();
+
+    }
+
+    public void macaraDreaptaEncoder (int ticks, double power, int timeout) {
+
+        //ticks < 0: ridicare
+        //ticks > 0: coborare
+        ElapsedTime runtime = new ElapsedTime();
+
+        scripeteDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        scripeteDreapta.setTargetPosition(ticks);
+
+        scripeteDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        scripeteDreapta.setPower(power);
+
+        runtime.reset();
+        while (scripeteDreapta.isBusy() && runtime.seconds() < timeout);
+
+        scripeteDreapta.setPower(0);
+
+    }
+
+    public void macaraStangaEncoder (int ticks, double power, int timeout) {
+
+        //ticks < 0: ridicare
+        //ticks > 0: coborare
+        ElapsedTime runtime = new ElapsedTime();
+
+        scripeteStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        scripeteStanga.setTargetPosition(ticks);
+
+        scripeteStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        scripeteStanga.setPower(power);
+
+        runtime.reset();
+        while (scripeteStanga.isBusy() && runtime.seconds() < timeout);
+
+        scripeteStanga.setPower(0);
+    }
+
+    public void macaraStDrEnc (int ticks, double power, int timeout) {
+
+        ElapsedTime runtime = new ElapsedTime();
+
+        scripeteDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        scripeteStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        scripeteStanga.setTargetPosition(ticks);
+        scripeteDreapta.setTargetPosition(ticks);
+
+        scripeteDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        scripeteStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        scripeteStanga.setPower(power);
+        scripeteDreapta.setPower(power);
+
+        runtime.reset();
+        while (scripeteDreapta.isBusy() && scripeteStanga.isBusy() && runtime.seconds() < timeout);
+
+        scripeteStanga.setPower(0);
+        scripeteDreapta.setPower(0);
 
     }
 
@@ -170,22 +219,6 @@ public class RobotMap {
         stopDriving();
     }
 
-    public void raiseServo (int height, double power, int timeout) {
-
-        ElapsedTime runtime = new ElapsedTime();
-
-        scripeteStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        scripeteStanga.setTargetPosition(height);
-
-        scripeteStanga.setPower(power);
-
-        runtime.reset();
-
-        while (scripeteStanga.isBusy() && runtime.seconds() < timeout);
-
-        scripeteStanga.setPower(0);
-    }
 
     public void stopDriving() {
         stangaFata.setPower(0);

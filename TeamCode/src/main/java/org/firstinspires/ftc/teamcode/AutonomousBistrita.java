@@ -16,77 +16,77 @@ public class AutonomousBistrita extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            //Pozitionare catre cub
-            robot.strafe(1400, 0.7, 3);
-////
-////            //Ridicarea bratului
-            robot.ridicareBratDreapta.setPower(0.3);
-            sleep(1500);
-//
+
+            robot.ghearaDreapta.setPosition(0.5);
+            //Ridicarea bratului
+            robot.ridicareBratDreapta.setPower(0.6);
             robot.scripeteDreapta.setPower(0.5);
             sleep(1000);
-//
-//            //Deplasare catre cub
-            robot.runUsingEncoders(7000, 0.8, 5);
-//
-//            //Prinderea mineralului si ridicarea usoara a scripetelul
+
+            //Deplasare catre cub
+            robot.runUsingEncoders(6250, 0.8, 5);
+
+            //Prinderea mineralului si ridicarea usoara a scripetelul
             robot.ghearaDreapta.setPosition(1);
             sleep(500);
-//
-//            //Coborarea bratului
-            robot.ridicareBratDreapta.setPower(-0.4);
-            sleep(1000);
-//
-//            //Miscare inapoi ca sa poata trece pe sub skybridge
-            robot.runUsingEncoders(-3500, 0.9, 5);
-//
-//            //Miscare catre building zone
+
+            //Coborarea bratului
+            robot.ridicareBratDreapta.setPower(-0.85);
+            sleep(700);
+
+            //Miscare inapoi ca sa poata trece pe sub skybridge
+            robot.runUsingEncoders(-2750, 1, 5);
+
+            //Miscare catre building zone
             robot.rotate(80, 0.8, 2);
+            //12250 - pana la a doua gaura
             robot.runUsingEncoders(12250, 1, 9);
 
             //Indreptare catre platforma si miscare catre ea
             robot.rotate(-80, 0.8, 2);
-            robot.runUsingEncoders(1350, 0.7, 2);
+            robot.runUsingEncoders(1750, 1, 3);
 
-            //Ridicarea bratului si plasarea mineralului pe platforma
-            robot.ridicareBratDreapta.setPower(0.4);
-            robot.scripeteDreapta.setPower(-0.4);
-            sleep(1000);
-            robot.scripeteDreapta.setPower(0.6);
-            sleep(500);
-            robot.ghearaDreapta.setPosition(0.5);
-            sleep(500);
-
-            //Ridicarea bratului pentru a putea sa ne deplasam
-            robot.scripeteDreapta.setPower(-0.9);
-            robot.ridicareBratDreapta.setPower(-0.5);
-            sleep(600);
-            robot.scripeteDreapta.setPower(0);
-            robot.ridicareBratDreapta.setPower(0);
-
-            //Indepartare dinspre platforma
-            robot.runUsingEncoders(-1200, 0.9, 2);
-
-            //Rotire catre skybridge si miscare sub el
-            robot.rotate(-80, 0.8, 2);
-            robot.runUsingEncoders(8000, 1, 6);
-
-//
-//            //Miscare in fata catre platforma
-//            robot.runUsingEncoders(7000, 0.6, 4);
-//
-//            //Ridicarea bratului si lasarea scripetelui
-//            robot.ridicareBratDreapta.setPower(-0.3);
-//            sleep(2000);
-//            robot.scripeteStanga.setPower(0.5);
-//            sleep(1500);
-//
-//            //Eliberarea stone-ului
+            //Ridicarea bratelor si plasarea mineralului pe platforma
+//            robot.ridicareBratDreapta.setPower(0.8);
+//            robot.scripeteDreapta.setPower(-0.9);
+//            robot.ridicareBratStanga.setPower(-0.8);
+//            robot.scripeteStanga.setPower(-0.9);
+//            sleep(1000);
+//            robot.scripeteDreapta.setPower(0.6);
+//            sleep(700);
 //            robot.ghearaDreapta.setPosition(0.5);
+//            sleep(500);
+
+            robot.macaraDreaptaEncoder(-180, 0.7, 2);
+
+            robot.ridicareBratDreapta.setPower(0.8);
+            robot.ridicareBratStanga.setPower(0.8);
+            sleep(700);
+
+            robot.ghearaDreapta.setPosition(0.5);
+
+            robot.strafe(-2000, 1, 5);
+
+            robot.macaraStDrEnc(95, 0.6, 2);
+
+            robot.runUsingEncoders(-3600, 1, 4);
+//            robot.rotate(90, 1, 2);
 //
-//            //Miscare inapoi si plasare sub skybridge
-//            robot.runUsingEncoders(-6500, 0.6, 4);
-//            robot.strafe(5000, 0.6, 4);
+//            //Ridicarea bratului pentru a putea sa ne deplasam
+//            robot.scripeteDreapta.setPower(-0.9);
+//            robot.ridicareBratDreapta.setPower(-0.6);
+//            robot.ridicareBratStanga.setPower(0.6);
+//            robot.scripeteStanga.setPower(-0.9);
+//            sleep(750);
+//            robot.scripeteDreapta.setPower(0);
+//            robot.ridicareBratDreapta.setPower(0);
+//            robot.ridicareBratStanga.setPower(0);
+//            robot.scripeteStanga.setPower(0);
+//
+//
+//            //Miscare sub skybridge
+//            robot.runUsingEncoders(-8000, 0.9, 2);
+
 
         }
 

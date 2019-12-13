@@ -1,38 +1,37 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp (name="TeleOP Bistrita")
+@TeleOp(name = "TeleOP Relativ")
+public class FieldRelativeMode extends LinearOpMode {
 
-public class TestTeleOP extends LinearOpMode {
-
-    RobotMap robot = null;
-
-    private void basculare (int ticks, double power, DcMotor motor) {
-        if (ticks < 0) motor.setPower(-power);
-        else motor.setPower(power);
-    }
+    private RobotMap robot = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         ElapsedTime runtime = new ElapsedTime();
         robot = new RobotMap(hardwareMap);
-
         waitForStart();
 
         while (opModeIsActive()) {
-
             /** GAMEPAD 1 */
 
             //Miscarea sasiului
-            double rotate = -gamepad1.right_stick_x;
-            double strafe =  gamepad1.left_stick_x;
-            double forward = gamepad1.left_stick_y;
+//            double rotate = -gamepad1.right_stick_x;
+//            double strafe =  gamepad1.left_stick_x;
+//            double forward = gamepad1.left_stick_y;
+
+            double x = gamepad1.left_stick_x;
+            double y = gamepad1.left_stick_y;
+
+            double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle());
+            double ipotenuse = Math.sqrt(x * x + y * y);
+            double rotate  = -gamepad1.right_stick_x;
+            double strafe  = Math.sin(direction) * ipotenuse;
+            double forward = Math.cos(direction) * ipotenuse;
 
             double sS = -strafe - forward - rotate;
             double dF =  strafe + forward - rotate;
@@ -47,11 +46,11 @@ public class TestTeleOP extends LinearOpMode {
 
 
             //Ridicarea scripetelui
-            robot.ridicareBratDreapta.setPower(-gamepad1.right_stick_y * 0.7);
+            robot.ridicareBratDreapta.setPower(-gamepad1.right_stick_y * 0.9);
 
 
             //Ridicarea scripetelui din dreapta
-            double raisePower = 0.7;
+            double raisePower = 0.8;
             int ticks = 1440;
             if (gamepad1.right_trigger != 0) {
                 robot.scripeteDreapta.setPower(raisePower);
@@ -93,8 +92,8 @@ public class TestTeleOP extends LinearOpMode {
 
 
             //Bascularea bratelor
-            robot.ridicareBratDreapta.setPower(-gamepad2.right_stick_y);
-            robot.ridicareBratStanga.setPower(-gamepad2.left_stick_y);
+            robot.ridicareBratDreapta.setPower(-gamepad2.right_stick_y * 0.9);
+            robot.ridicareBratStanga.setPower(-gamepad2.left_stick_y * 0.9);
 
             //Ridicarea scripetelui pentru bratul din dreapta
             if (gamepad2.right_trigger != 0) {
@@ -130,6 +129,9 @@ public class TestTeleOP extends LinearOpMode {
                 robot.ghearaStanga.setPosition(0.5);
             }
 
+
+
         }
+
     }
 }
