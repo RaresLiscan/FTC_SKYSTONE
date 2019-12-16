@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="Autonomie Rosu")
-public class RedAutonomousBistrita extends LinearOpMode {
+@Autonomous(name="Autonomie Albastru 5p")
+public class BlueAutonomous1 extends LinearOpMode {
 
     RobotMap robot = null;
 
@@ -12,13 +13,13 @@ public class RedAutonomousBistrita extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new RobotMap(hardwareMap);
-        robot.zeroPowerBeh();
         waitForStart();
 
         if (opModeIsActive()) {
 
-            robot.strafe(3500, 0.6, 3);
+            robot.runUsingEncoders(350, 1, 2);
 
+            robot.strafe(-1700, 0.6, 3);
         }
 
     }

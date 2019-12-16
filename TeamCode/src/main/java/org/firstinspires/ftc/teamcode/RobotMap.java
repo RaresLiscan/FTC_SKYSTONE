@@ -90,10 +90,10 @@ public class RobotMap {
         dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        stangaFata.setTargetPosition(distance);
-        stangaSpate.setTargetPosition(distance);
-        dreaptaFata.setTargetPosition(-distance);
-        dreaptaSpate.setTargetPosition(-distance);
+        stangaFata.setTargetPosition(-distance);
+        stangaSpate.setTargetPosition(-distance);
+        dreaptaFata.setTargetPosition(distance);
+        dreaptaSpate.setTargetPosition(distance);
 
         stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -192,28 +192,28 @@ public class RobotMap {
         dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        stangaFata.setTargetPosition(distance);
-        stangaSpate.setTargetPosition(-distance);
-        dreaptaFata.setTargetPosition(distance);
-        dreaptaSpate.setTargetPosition(-distance);
+        stangaFata.setTargetPosition(-distance);
+        stangaSpate.setTargetPosition(distance);
+        dreaptaFata.setTargetPosition(-distance);
+        dreaptaSpate.setTargetPosition(distance);
 
         stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        stangaFata.setPower(power + correction);
-        stangaSpate.setPower(power + correction);
-        dreaptaFata.setPower(power - correction);
-        dreaptaSpate.setPower(power - correction);
+        stangaFata.setPower(power);
+        stangaSpate.setPower(power);
+        dreaptaFata.setPower(power);
+        dreaptaSpate.setPower(power);
 
         runtime.reset();
 
         while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
-            stangaFata.setPower(power + correction);
-            stangaSpate.setPower(power + correction);
-            dreaptaFata.setPower(power - correction);
-            dreaptaSpate.setPower(power - correction);
+            stangaFata.setPower(power);
+            stangaSpate.setPower(power);
+            dreaptaFata.setPower(power);
+            dreaptaSpate.setPower(power);
         }
 
         stopDriving();
@@ -239,7 +239,7 @@ public class RobotMap {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
-        double correction, angle, gain = .010;
+        double correction, angle, gain = .10;
 
         angle = getAngle();
 
@@ -299,13 +299,12 @@ public class RobotMap {
         {   // turn right.
             leftPower = power;
             rightPower = -power;
-//            power = -power;
+            power = -power;
         }
         else if (degrees > 0)
         {   // turn left.
             leftPower = -power;
             rightPower = power;
-            power = -power;
         }
         else return;
 

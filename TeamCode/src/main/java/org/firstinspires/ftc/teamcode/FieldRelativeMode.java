@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOP Relativ")
@@ -24,12 +25,12 @@ public class FieldRelativeMode extends LinearOpMode {
 //            double strafe =  gamepad1.left_stick_x;
 //            double forward = gamepad1.left_stick_y;
 
-            double x = gamepad1.left_stick_x;
-            double y = gamepad1.left_stick_y;
+            double x = -gamepad1.left_stick_x;
+            double y = -gamepad1.left_stick_y;
 
             double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle());
             double ipotenuse = Math.sqrt(x * x + y * y);
-            double rotate  = -gamepad1.right_stick_x;
+            double rotate  = gamepad1.right_stick_x * 0.75;
             double strafe  = Math.sin(direction) * ipotenuse;
             double forward = Math.cos(direction) * ipotenuse;
 
@@ -128,8 +129,6 @@ public class FieldRelativeMode extends LinearOpMode {
             else if (gamepad2.dpad_down) {
                 robot.ghearaStanga.setPosition(0.5);
             }
-
-
 
         }
 
