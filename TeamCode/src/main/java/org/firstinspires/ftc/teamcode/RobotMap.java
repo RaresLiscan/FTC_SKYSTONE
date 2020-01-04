@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -178,6 +179,103 @@ public class RobotMap {
 
     }
 
+    public void encoderStrafe(int distance, double power, int timeout, Telemetry telemetry) {
+        //Distance > 0 => dreapta
+        //Distance < 0 => stanga
+
+        ElapsedTime runtime = new ElapsedTime();
+
+        correction = checkDirection();
+
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        stangaFata.setTargetPosition(-distance);
+        stangaSpate.setTargetPosition(distance);
+        dreaptaFata.setTargetPosition(-distance);
+        dreaptaSpate.setTargetPosition(distance);
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        stangaFata.setPower(power);
+        stangaSpate.setPower(power);
+        dreaptaFata.setPower(power);
+        dreaptaSpate.setPower(power);
+
+        runtime.reset();
+
+        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+            telemetry.addData("Stanga fata: ", stangaFata.getCurrentPosition());
+            telemetry.addData("Stanga spate: ", stangaSpate.getCurrentPosition());
+            telemetry.addData("Dreapta fata: ", dreaptaFata.getCurrentPosition());
+            telemetry.addData("Dreapta spate", dreaptaSpate.getCurrentPosition());
+            telemetry.update();
+        }
+
+        stopDriving();
+    }
+
+    public void strafeCorrectionTest(int distance, double power, int timeout, Telemetry telemetry){
+        //Distance > 0 => dreapta
+        //Distance < 0 => stanga
+
+        ElapsedTime runtime = new ElapsedTime();
+
+        correction = checkDirection();
+        correction = Math.toRadians(correction) / 5;
+
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        stangaFata.setTargetPosition(-distance);
+        stangaSpate.setTargetPosition(distance);
+        dreaptaFata.setTargetPosition(-distance);
+        dreaptaSpate.setTargetPosition(distance);
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        stangaFata.setPower(power);
+        stangaSpate.setPower(power);
+        dreaptaFata.setPower(power);
+        dreaptaSpate.setPower(power);
+
+        runtime.reset();
+
+        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+            correction = checkDirection();
+            correction = Math.toRadians(correction);
+
+//            stangaSpate.setPower (power  + correction);
+//            stangaFata.setPower  (power  - correction);
+//            dreaptaSpate.setPower(power  + correction);
+//            dreaptaFata.setPower (power  - correction);
+
+            stangaSpate .setPower(power  + correction);
+            stangaFata  .setPower(power  - correction);
+            dreaptaSpate.setPower(power  - correction);
+            dreaptaFata .setPower(power  + correction);
+
+            telemetry.addData("Correction: ", correction);
+            telemetry.addData("Stanga fata: ", stangaFata.getCurrentPosition());
+            telemetry.addData("Stanga spate: ", stangaSpate.getCurrentPosition());
+            telemetry.addData("Dreapta fata: ", dreaptaFata.getCurrentPosition());
+            telemetry.addData("Dreapta spate", dreaptaSpate.getCurrentPosition());
+            telemetry.update();
+        }
+
+        stopDriving();
+    }
+
     public void strafe (int distance, double power, int timeout) {
 
         //Distance > 0 => dreapta
@@ -210,10 +308,7 @@ public class RobotMap {
         runtime.reset();
 
         while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
-            stangaFata.setPower(power);
-            stangaSpate.setPower(power);
-            dreaptaFata.setPower(power);
-            dreaptaSpate.setPower(power);
+
         }
 
         stopDriving();
@@ -239,7 +334,7 @@ public class RobotMap {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
-        double correction, angle, gain = .10;
+        double correction, angle, gain = 1;
 
         angle = getAngle();
 

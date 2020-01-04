@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "TeleOP Relativ")
-public class FieldRelativeMode extends LinearOpMode {
+@TeleOp(name = "TeleOP Rosu")
+public class RedTeleOP extends LinearOpMode {
 
     private RobotMap robot = null;
 
@@ -18,6 +18,9 @@ public class FieldRelativeMode extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
+            runtime.reset();
+
             /** GAMEPAD 1 */
 
             //Miscarea sasiului
@@ -30,14 +33,15 @@ public class FieldRelativeMode extends LinearOpMode {
 
             double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle());
             double ipotenuse = Math.sqrt(x * x + y * y);
-            double rotate  = gamepad1.right_stick_x * 0.75;
-            double strafe  = Math.sin(direction) * ipotenuse;
-            double forward = Math.cos(direction) * ipotenuse;
+            double rotate  = gamepad1.right_stick_x * 0.6;
+            double strafe  = Math.sin(direction) * ipotenuse * 0.6;
+            double forward = Math.cos(direction) * ipotenuse * 0.9;
 
             double sS = -strafe - forward - rotate;
             double dF =  strafe + forward - rotate;
             double sF =  strafe - forward - rotate;
             double dS = -strafe + forward - rotate;
+
 
             robot.stangaSpate.setPower(sS);
             robot.dreaptaFata.setPower(dF);
@@ -47,7 +51,7 @@ public class FieldRelativeMode extends LinearOpMode {
 
 
             //Ridicarea scripetelui
-            robot.ridicareBratDreapta.setPower(-gamepad1.right_stick_y * 0.9);
+            robot.ridicareBratStanga.setPower(-gamepad1.right_stick_y * 0.9);
 
 
             //Ridicarea scripetelui din dreapta
@@ -59,7 +63,7 @@ public class FieldRelativeMode extends LinearOpMode {
             else if (gamepad1.right_bumper) {
                 robot.scripeteDreapta.setPower(-raisePower);
             }
-            else robot.scripeteDreapta.setPower(0);
+            else if (!gamepad2.right_bumper && gamepad2.right_trigger == 0) robot.scripeteDreapta.setPower(0);
 
 
             //Prinderea mineralului
@@ -77,7 +81,7 @@ public class FieldRelativeMode extends LinearOpMode {
             else if (gamepad1.left_trigger != 0) {
                 robot.scripeteStanga.setPower(raisePower);
             }
-            else robot.scripeteStanga.setPower(0);
+            else if (gamepad2.left_trigger == 0 && !gamepad2.left_bumper) robot.scripeteStanga.setPower(0);
 
 
             //Prinderea capstone-ului
@@ -103,7 +107,7 @@ public class FieldRelativeMode extends LinearOpMode {
             else if (gamepad2.right_bumper) {
                 robot.scripeteDreapta.setPower(-raisePower);
             }
-            else robot.scripeteDreapta.setPower(0);
+            else if (gamepad1.right_trigger == 0 && !gamepad1.right_bumper) robot.scripeteDreapta.setPower(0);
 
             //Ridicarea scripetelui pentru bratul din stanga
             if (gamepad2.left_bumper) {
@@ -112,23 +116,23 @@ public class FieldRelativeMode extends LinearOpMode {
             else if (gamepad2.left_trigger != 0) {
                 robot.scripeteStanga.setPower(raisePower);
             }
-            else robot.scripeteStanga.setPower(0);
+            else if (gamepad1.left_trigger == 0 && !gamepad1.left_bumper) robot.scripeteStanga.setPower(0);
 
 
-            //Prinderea mineralului pentru bratul din dreapta
-            if (gamepad2.a) {
-                robot.ghearaDreapta.setPosition(0.5);
-            }
-            else if (gamepad2.y) {
-                robot.ghearaDreapta.setPosition(1);
-            }
-            //Prinderea de capstone
-            if (gamepad2.dpad_up) {
-                robot.ghearaStanga.setPosition(0);
-            }
-            else if (gamepad2.dpad_down) {
-                robot.ghearaStanga.setPosition(0.5);
-            }
+//            //Prinderea mineralului pentru bratul din dreapta
+//            if (gamepad2.a) {
+//                robot.ghearaDreapta.setPosition(0.5);
+//            }
+//            else if (gamepad2.y) {
+//                robot.ghearaDreapta.setPosition(1);
+//            }
+//            //Prinderea de capstone
+//            if (gamepad2.dpad_up) {
+//                robot.ghearaStanga.setPosition(0);
+//            }
+//            else if (gamepad2.dpad_down) {
+//                robot.ghearaStanga.setPosition(0.5);
+//            }
 
         }
 
