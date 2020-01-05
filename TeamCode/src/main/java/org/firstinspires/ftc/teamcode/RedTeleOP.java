@@ -57,38 +57,38 @@ public class RedTeleOP extends LinearOpMode {
             //Ridicarea scripetelui din dreapta
             double raisePower = 0.8;
             int ticks = 1440;
-            if (gamepad1.right_trigger != 0) {
+            if (gamepad1.left_trigger == 1) {
                 robot.scripeteDreapta.setPower(raisePower);
             }
-            else if (gamepad1.right_bumper) {
+            else if (gamepad1.left_bumper) {
                 robot.scripeteDreapta.setPower(-raisePower);
             }
-            else if (!gamepad2.right_bumper && gamepad2.right_trigger == 0) robot.scripeteDreapta.setPower(0);
+            else if (!gamepad2.right_bumper && gamepad2.right_trigger != 1) robot.scripeteDreapta.setPower(0);
 
 
             //Prinderea mineralului
-            if (gamepad1.a) {
+            if (gamepad1.dpad_down) {
                 robot.ghearaDreapta.setPosition(0.5);
             }
-            else if (gamepad1.y) {
+            else if (gamepad1.dpad_up) {
                 robot.ghearaDreapta.setPosition(1);
             }
 
             //Ridicarea scripetelui din stanga
-            if (gamepad1.left_bumper) {
+            if (gamepad1.right_bumper) {
                 robot.scripeteStanga.setPower(-raisePower);
             }
-            else if (gamepad1.left_trigger != 0) {
-                robot.scripeteStanga.setPower(raisePower);
+            else if (gamepad1.right_trigger == 1) {
+                robot.scripeteStanga.setPower(raisePower * robot.coborareScripete);
             }
-            else if (gamepad2.left_trigger == 0 && !gamepad2.left_bumper) robot.scripeteStanga.setPower(0);
+            else if (gamepad2.left_trigger != 1 && !gamepad2.left_bumper) robot.scripeteStanga.setPower(0);
 
 
             //Prinderea capstone-ului
-            if (gamepad1.dpad_down) {
+            if (gamepad1.a) {
                 robot.ghearaStanga.setPosition(0.5);
             }
-            if (gamepad1.dpad_up) {
+            if (gamepad1.y) {
                 robot.ghearaStanga.setPosition(0);
             }
 
@@ -101,22 +101,22 @@ public class RedTeleOP extends LinearOpMode {
             robot.ridicareBratStanga.setPower(-gamepad2.left_stick_y * 0.9);
 
             //Ridicarea scripetelui pentru bratul din dreapta
-            if (gamepad2.right_trigger != 0) {
+            if (gamepad2.right_trigger == 1) {
                 robot.scripeteDreapta.setPower(raisePower);
             }
             else if (gamepad2.right_bumper) {
                 robot.scripeteDreapta.setPower(-raisePower);
             }
-            else if (gamepad1.right_trigger == 0 && !gamepad1.right_bumper) robot.scripeteDreapta.setPower(0);
+            else if (gamepad1.left_trigger != 1 && !gamepad1.left_bumper) robot.scripeteDreapta.setPower(0);
 
             //Ridicarea scripetelui pentru bratul din stanga
             if (gamepad2.left_bumper) {
                 robot.scripeteStanga.setPower(-raisePower);
             }
-            else if (gamepad2.left_trigger != 0) {
+            else if (gamepad2.left_trigger == 1) {
                 robot.scripeteStanga.setPower(raisePower);
             }
-            else if (gamepad1.left_trigger == 0 && !gamepad1.left_bumper) robot.scripeteStanga.setPower(0);
+            else if (gamepad1.right_trigger != 1 && !gamepad1.right_bumper) robot.scripeteStanga.setPower(0);
 
 
 //            //Prinderea mineralului pentru bratul din dreapta

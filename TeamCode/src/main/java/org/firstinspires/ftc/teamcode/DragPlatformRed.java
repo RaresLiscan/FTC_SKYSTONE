@@ -25,12 +25,16 @@ public class DragPlatformRed extends LinearOpMode {
             robot.ridicareBratStanga.setPower(0.8);
             robot.ridicareBratDreapta.setPower(0.8);
             sleep(1000);
+            robot.ridicareBratStanga.setPower(0);
+            robot.ridicareBratDreapta.setPower(0);
 
             robot.runUsingEncoders(-3050, 0.4, 5);
 
             robot.ridicareBratDreapta.setPower(-0.8);
             robot.ridicareBratStanga.setPower(-0.8);
             sleep(1000);
+            robot.ridicareBratStanga.setPower(0);
+            robot.ridicareBratDreapta.setPower(0);
 
             robot.strafe(-5150, 0.6, 4);
         }

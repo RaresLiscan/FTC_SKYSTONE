@@ -27,7 +27,8 @@ public class RobotMap {
     public Servo ghearaStanga = null;
     public BNO055IMU imu = null;
     Orientation lastAngles = new Orientation();
-    double globalAngle, correction;
+    double globalAngle, correction, prevAngle;
+    double coborareScripete = 0.5;
 
 
     public RobotMap (HardwareMap hardwareMap) {
@@ -179,46 +180,6 @@ public class RobotMap {
 
     }
 
-    public void encoderStrafe(int distance, double power, int timeout, Telemetry telemetry) {
-        //Distance > 0 => dreapta
-        //Distance < 0 => stanga
-
-        ElapsedTime runtime = new ElapsedTime();
-
-        correction = checkDirection();
-
-        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        stangaFata.setTargetPosition(-distance);
-        stangaSpate.setTargetPosition(distance);
-        dreaptaFata.setTargetPosition(-distance);
-        dreaptaSpate.setTargetPosition(distance);
-
-        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        stangaFata.setPower(power);
-        stangaSpate.setPower(power);
-        dreaptaFata.setPower(power);
-        dreaptaSpate.setPower(power);
-
-        runtime.reset();
-
-        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
-            telemetry.addData("Stanga fata: ", stangaFata.getCurrentPosition());
-            telemetry.addData("Stanga spate: ", stangaSpate.getCurrentPosition());
-            telemetry.addData("Dreapta fata: ", dreaptaFata.getCurrentPosition());
-            telemetry.addData("Dreapta spate", dreaptaSpate.getCurrentPosition());
-            telemetry.update();
-        }
-
-        stopDriving();
-    }
 
     public void strafeCorrectionTest(int distance, double power, int timeout, Telemetry telemetry){
         //Distance > 0 => dreapta
@@ -254,11 +215,6 @@ public class RobotMap {
         while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = checkDirection();
             correction = Math.toRadians(correction);
-
-//            stangaSpate.setPower (power  + correction);
-//            stangaFata.setPower  (power  - correction);
-//            dreaptaSpate.setPower(power  + correction);
-//            dreaptaFata.setPower (power  - correction);
 
             stangaSpate .setPower(power  + correction);
             stangaFata  .setPower(power  - correction);
@@ -308,7 +264,13 @@ public class RobotMap {
         runtime.reset();
 
         while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+            correction = checkDirection();
+            correction = Math.toRadians(correction);
 
+            stangaSpate .setPower(power  + correction);
+            stangaFata  .setPower(power  - correction);
+            dreaptaSpate.setPower(power  - correction);
+            dreaptaFata .setPower(power  + correction);
         }
 
         stopDriving();
@@ -327,6 +289,23 @@ public class RobotMap {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAngle = 0;
+    }
+
+    public void newAngle() {
+        prevAngle = getAngle();
+    }
+
+    public double maintainAngle() {
+        double correction, angle;
+
+        angle = getAngle();
+
+        if (angle == prevAngle) correction = 0;
+        else {
+            correction = prevAngle - angle;
+        }
+
+        return correction;
     }
 
     public double checkDirection()
