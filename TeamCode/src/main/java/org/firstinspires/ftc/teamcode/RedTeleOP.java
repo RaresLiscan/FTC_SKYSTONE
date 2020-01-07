@@ -34,6 +34,11 @@ public class RedTeleOP extends LinearOpMode {
             double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle());
             double ipotenuse = Math.sqrt(x * x + y * y);
             double rotate  = gamepad1.right_stick_x * 0.6;
+
+//            if (rotate != 0) robot.newAngle();
+//            double correction = robot.maintainAngle();
+//            correction = Math.toRadians(correction);
+
             double strafe  = Math.sin(direction) * ipotenuse * 0.6;
             double forward = Math.cos(direction) * ipotenuse * 0.9;
 

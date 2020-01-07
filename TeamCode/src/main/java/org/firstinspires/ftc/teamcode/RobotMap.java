@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -29,6 +31,8 @@ public class RobotMap {
     Orientation lastAngles = new Orientation();
     double globalAngle, correction, prevAngle;
     double coborareScripete = 0.5;
+    public ColorSensor senzorStanga;
+    public ColorSensor senzorDreapta;
 
 
     public RobotMap (HardwareMap hardwareMap) {
@@ -44,6 +48,10 @@ public class RobotMap {
         ghearaDreapta.setPosition(1);
         ghearaStanga = hardwareMap.get(Servo.class, "ghearaStanga");
         ghearaStanga.setPosition(0);
+        senzorDreapta = hardwareMap.get(ColorSensor.class, "senzorDr");
+        senzorStanga = hardwareMap.get(ColorSensor.class, "senzorSt");
+        senzorDreapta.enableLed(false);
+        senzorStanga.enableLed(false);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
