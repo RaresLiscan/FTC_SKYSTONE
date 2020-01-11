@@ -34,42 +34,45 @@ public class SkystoneAutonomousBlue extends LinearOpMode {
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-        robot.runUsingEncoders(750, 0.4, 5);//500
+        robot.runUsingEncoders(900, 0.4, 5);//500
 
         robot.runUsingEncoders(-3650, 0.7, 5);//3000
 
-        robot.rotate(-80, 0.6, 5);
+        robot.rotate(-78, 0.7, 5);
+
+        double correction = robot.checkDirection();
+        robot.rotate((int) correction, 0.2, 2);
+
+        sleep(1000);
     }
 
 
     void skystoneLeft() {
         telemetry.addData("Position: ", "left");
         telemetry.update();
-        sleep(5000);
-//        robot.strafe(-500, 0.4, 3);
-//        robot.strafe(-1000, 0.6, 4);
-//        robot.runUsingEncoders(-500, 0.6, 3);
-//        robot.scripeteDreapta.setPower(0.85);
-//        sleep(600);
-//        robot.scripeteDreapta.setPower(0);
-//        robot.runUsingEncoders(750, 0.6, 3);
-//        robot.ghearaDreapta.setPosition(1);
-//        sleep(600);
-//        robot.ridicareBratDreapta.setPower(-0.85);
-//        sleep(600);
-//        robot.ridicareBratDreapta.setPower(0);
+        robot.strafe(-1000, 0.65, 3);
+        double correction = robot.checkDirection();
+        robot.rotate((int) correction, 0.3, 2);
+        robot.runUsingEncoders(400, 0.4, 3);
+        robot.ghearaDreapta.setPosition(1);
+        sleep(600);
+        robot.ridicareBratDreapta.setPower(-0.85);
+        sleep(700);
+        robot.ridicareBratDreapta.setPower(0);
+        robot.runUsingEncoders(-600, 0.5, 3);
+        robot.rotate(78, 0.7, 2);
+        robot.runUsingEncoders(7450, 0.8, 9);
+        robot.rotate(-79, 0.7, 3);
+        robot.runUsingEncoders(680, 0.5, 3);//550
+        robot.ghearaDreapta.setPosition(0.5);
+        robot.macaraDreaptaEncoder(-70, 0.7, 2);
+        rotateFundation();
     }
 
     void skystoneRight() {
         telemetry.addData("Position: ", "right");
         telemetry.update();
         robot.runUsingEncoders(300,0.4, 3);
-//        sleep(5000);
-//        robot.strafe(500, 0.4, 3);
-//        robot.scripeteDreapta.setPower(0.85);
-//        sleep(600);
-//        robot.scripeteDreapta.setPower(0);
-//        robot.runUsingEncoders(350, 0.5, 3);
         robot.ghearaDreapta.setPosition(1);
         sleep(600);
         robot.ridicareBratDreapta.setPower(-0.85);
@@ -78,8 +81,8 @@ public class SkystoneAutonomousBlue extends LinearOpMode {
         robot.runUsingEncoders(-600, 0.5, 3);
         robot.rotate(78, 0.7, 2);
         robot.runUsingEncoders(8000, 0.8, 9);
-        robot.rotate(-78, 0.7, 3);
-        robot.runUsingEncoders(620, 0.5, 3);//550
+        robot.rotate(-79, 0.7, 3);
+        robot.runUsingEncoders(680, 0.5, 3);//550
         robot.ghearaDreapta.setPosition(0.5);
         robot.macaraDreaptaEncoder(-70, 0.7, 2);
         rotateFundation();
