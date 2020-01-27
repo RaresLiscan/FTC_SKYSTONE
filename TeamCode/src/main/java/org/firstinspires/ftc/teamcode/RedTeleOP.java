@@ -17,6 +17,8 @@ public class RedTeleOP extends LinearOpMode {
         robot = new RobotMap(hardwareMap);
         waitForStart();
 
+        robot.ghearaDreapta.setPosition(1);
+
         while (opModeIsActive()) {
 
             runtime.reset();
@@ -56,7 +58,7 @@ public class RedTeleOP extends LinearOpMode {
 
 
             //Ridicarea scripetelui
-            robot.ridicareBratStanga.setPower(-gamepad1.right_stick_y * 0.9);
+            //robot.ridicareBratStanga.setPower(-gamepad1.right_stick_y * 0.9);
 
 
             //Ridicarea scripetelui din dreapta
@@ -95,6 +97,11 @@ public class RedTeleOP extends LinearOpMode {
             }
             if (gamepad1.y) {
                 robot.ghearaStanga.setPosition(0);
+            }
+
+            //Resetare unghi
+            if (gamepad1.x){
+                robot.resetAngle();
             }
 
 

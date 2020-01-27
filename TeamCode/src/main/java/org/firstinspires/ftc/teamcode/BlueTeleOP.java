@@ -17,6 +17,8 @@ public class BlueTeleOP extends LinearOpMode {
         robot = new RobotMap(hardwareMap);
         waitForStart();
 
+        robot.ghearaStanga.setPosition(0);
+
         while (opModeIsActive()) {
 
             runtime.reset();
@@ -42,8 +44,26 @@ public class BlueTeleOP extends LinearOpMode {
             double sF =  strafe - forward - rotate;
             double dS = -strafe + forward - rotate;
 
-            double correction = robot.checkDirection();
-            correction = Math.toRadians(correction);
+            // double sS;
+            //double sF;
+            //double dS;
+            // double dF;
+            //double correction = robot.checkDirection();
+            //correction = Math.toRadians(correction);
+
+
+            // if (Math.abs(x) <= Math.abs(y)) {
+            //    sS = -y - rotate;
+            //      sF = -y - rotate;
+            //     dF = y - rotate;
+            //     dS = y - rotate;
+            //  }
+            //  else {
+            //     dS = -x - rotate + correction;
+            //     sS = -x - rotate - correction;
+            //     dF = x - rotate - correction;
+            //     sF = x - rotate + correction;
+            // }
 
 
             robot.stangaSpate.setPower(sS);
@@ -54,7 +74,7 @@ public class BlueTeleOP extends LinearOpMode {
 
 
             //Ridicarea scripetelui
-            robot.ridicareBratDreapta.setPower(-gamepad1.right_stick_y * 0.9);
+            //robot.ridicareBratDreapta.setPower(-gamepad1.right_stick_y * 0.9);
 
 
             //Ridicarea scripetelui din dreapta
@@ -64,7 +84,7 @@ public class BlueTeleOP extends LinearOpMode {
                 robot.scripeteDreapta.setPower(raisePower);
             }
             else if (gamepad1.right_bumper) {
-                robot.scripeteDreapta.setPower(-raisePower);
+                robot.scripeteDreapta.setPower(-raisePower * -0.3);
             }
             else if (!gamepad2.right_bumper && gamepad2.right_trigger == 0) robot.scripeteDreapta.setPower(0);
 
@@ -82,7 +102,7 @@ public class BlueTeleOP extends LinearOpMode {
                 robot.scripeteStanga.setPower(-raisePower);
             }
             else if (gamepad1.left_trigger != 0) {
-                robot.scripeteStanga.setPower(raisePower);
+                robot.scripeteStanga.setPower(raisePower * 0.3);
             }
             else if (gamepad2.left_trigger == 0 && !gamepad2.left_bumper) robot.scripeteStanga.setPower(0);
 
@@ -93,6 +113,11 @@ public class BlueTeleOP extends LinearOpMode {
             }
             if (gamepad1.dpad_up) {
                 robot.ghearaStanga.setPosition(0);
+            }
+
+            //Resetare unghi
+            if (gamepad1.x){
+                robot.resetAngle();
             }
 
 
@@ -122,20 +147,20 @@ public class BlueTeleOP extends LinearOpMode {
             else if (gamepad1.left_trigger == 0 && !gamepad1.left_bumper) robot.scripeteStanga.setPower(0);
 
 
-            //Prinderea mineralului pentru bratul din dreapta
-            if (gamepad2.a) {
-                robot.ghearaDreapta.setPosition(0.5);
-            }
-            else if (gamepad2.y) {
-                robot.ghearaDreapta.setPosition(1);
-            }
-            //Prinderea de capstone
-            if (gamepad2.dpad_up) {
-                robot.ghearaStanga.setPosition(0);
-            }
-            else if (gamepad2.dpad_down) {
-                robot.ghearaStanga.setPosition(0.5);
-            }
+//            //Prinderea mineralului pentru bratul din dreapta
+//            if (gamepad2.a) {
+//                robot.ghearaDreapta.setPosition(0.5);
+//            }
+//            else if (gamepad2.y) {
+//                robot.ghearaDreapta.setPosition(1);
+//            }
+//            //Prinderea de capstone
+//            if (gamepad2.dpad_up) {
+//                robot.ghearaStanga.setPosition(0);
+//            }
+//            else if (gamepad2.dpad_down) {
+//                robot.ghearaStanga.setPosition(0.5);
+//            }
 
         }
 
