@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous(name = "Mutare fundatie rotire - Rosu perete")
-@Disabled
+//@Disabled
 public class DragPlatformRedRotateParcare extends LinearOpMode {
 
     private RobotMap robot = null;

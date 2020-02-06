@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "Mutare fundatie - Albastru")
-@Disabled
+//@Disabled
 public class DragPlatformBlue extends LinearOpMode {
 
     private RobotMap robot = null;

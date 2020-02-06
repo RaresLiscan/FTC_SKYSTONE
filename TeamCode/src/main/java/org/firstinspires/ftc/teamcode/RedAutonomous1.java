@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name="Autonomie Rosu 5p")
-@Disabled
+//@Disabled
 public class RedAutonomous1 extends LinearOpMode {
 
     RobotMap robot = null;

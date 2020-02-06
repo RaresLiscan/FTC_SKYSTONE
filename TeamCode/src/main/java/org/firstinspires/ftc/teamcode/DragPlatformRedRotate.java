@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous(name = "Mutare fundatie rotire - Rosu bridge")
-@Disabled
+//@Disabled
 public class DragPlatformRedRotate extends LinearOpMode {
 
     private RobotMap robot = null;
