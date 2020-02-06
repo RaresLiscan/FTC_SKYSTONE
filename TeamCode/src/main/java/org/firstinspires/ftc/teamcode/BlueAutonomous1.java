@@ -4,7 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="Autonomie Albastru 5p")
+@Autonomous(name="Albastru 5p")
+@Disabled
 public class BlueAutonomous1 extends LinearOpMode {
 
     RobotMap robot = null;
@@ -20,6 +21,13 @@ public class BlueAutonomous1 extends LinearOpMode {
             robot.runUsingEncoders(350, 1, 2);
 
             robot.strafe(-1700, 0.6, 3);
+
+            robot.rotate(-85, 1, 2);
+
+            robot.strafe(450, 0.7, 2);
+
+            robot.ghearaStanga.setPosition(0.23);
+            sleep(1000);
         }
 
     }

@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Da Vinci", group="Linear Opmode")
-// @Disabled
+@Disabled
 public class DaVinci extends LinearOpMode {
 
     // Declare OpMode members.

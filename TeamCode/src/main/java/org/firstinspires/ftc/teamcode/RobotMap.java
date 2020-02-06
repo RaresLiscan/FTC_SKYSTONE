@@ -223,6 +223,7 @@ public class RobotMap {
 
         scripeteDreapta.setPower(0);
 
+        scripeteDreapta.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void macaraStangaEncoder (int ticks, double power, int timeout) {
@@ -243,6 +244,8 @@ public class RobotMap {
         while (scripeteStanga.isBusy() && runtime.seconds() < timeout);
 
         scripeteStanga.setPower(0);
+
+        scripeteStanga.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void macaraStDrEnc (int ticks, double power, int timeout) {

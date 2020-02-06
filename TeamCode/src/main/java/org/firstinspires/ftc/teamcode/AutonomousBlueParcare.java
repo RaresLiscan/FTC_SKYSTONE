@@ -1,18 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 //import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-@Autonomous(name = "Albastru completa brigde")
+@Autonomous(name = "Albastru completa perete")
 @Disabled
-public class AutonomousBlue extends LinearOpMode {
+public class AutonomousBlueParcare extends LinearOpMode {
 
     private RobotMap robot = null;
     double colorError = 18;
@@ -49,7 +48,7 @@ public class AutonomousBlue extends LinearOpMode {
 
         robot.runUsingEncoders(-200, 1, 3);
 
-        robot.strafe(800, 0.8, 3);
+        robot.strafe(-1600, 0.8, 3);
 
 //        double correction = robot.checkDirection();
 //        robot.rotate((int) correction, 0.2, 2);
@@ -69,7 +68,7 @@ public class AutonomousBlue extends LinearOpMode {
     void skystoneLeft() {
         telemetry.addData("Position: ", "left");
         telemetry.update();
-        robot.strafe(-975, 0.7, 3);//975
+        robot.strafe(-975, 0.7, 3);//1050
         double correction = robot.checkDirection();
         robot.rotate((int) correction, 0.2, 2);
 
@@ -124,7 +123,7 @@ public class AutonomousBlue extends LinearOpMode {
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
         robot.ghearaDreapta.setPosition(0.5);
-        robot.macaraDreaptaEncoder(-90, 0.7, 2);
+        robot.macaraDreaptaEncoder(-88, 0.7, 2);
         rotateFundation();
     }
 
@@ -225,7 +224,7 @@ public class AutonomousBlue extends LinearOpMode {
             telemetry.update();
             robot.ghearaDreapta.setPosition(0.5);
             robot.ridicareBratDreapta.setPower(0.5);
-            robot.scripeteDreapta.setPower(0.3);
+            robot.scripeteDreapta.setPower(0.5);
             sleep(1000);
             robot.ridicareBratDreapta.setPower(0);
             robot.scripeteDreapta.setPower(0);

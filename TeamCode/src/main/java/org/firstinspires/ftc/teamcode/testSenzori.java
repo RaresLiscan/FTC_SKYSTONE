@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 //import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 @TeleOp(name = "Test Senzori")
-//@Disabled                            // Comment this out to add to the opmode list
+@Disabled                            // Comment this out to add to the opmode list
 public class testSenzori extends LinearOpMode {
 
     ColorSensor senzorDr;

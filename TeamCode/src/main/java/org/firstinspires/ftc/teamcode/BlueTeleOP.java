@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOP Albastru")
+@Disabled
 public class BlueTeleOP extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -162,8 +164,8 @@ public class BlueTeleOP extends LinearOpMode {
             else if (gamepad1.left_trigger == 0 && !gamepad1.left_bumper) robot.scripeteStanga.setPower(0);
 
             if (gamepad2.x) {
-                robot.macaraStangaEncoder(-80, 0.9, 2);
-                robot.macaraDreaptaEncoder(-70, 0.9, 2);
+                robot.macaraStangaEncoder(-110, 0.9, 2);
+                robot.macaraDreaptaEncoder(-110, 0.9, 2);
             }
 
 

@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@Autonomous(name = "Rosu completa bridge")
+@Autonomous(name = "Rosu completa perete")
 //@Disabled
-public class AutonomousRed extends LinearOpMode {
+public class AutonomousRedParcare extends LinearOpMode {
 
     private RobotMap robot = null;
     double colorError = 18;
@@ -50,7 +50,7 @@ public class AutonomousRed extends LinearOpMode {
 
         robot.runUsingEncodersCorrection(-300, 1, 2);
 
-        robot.strafe(-825, 0.7, 2);
+        robot.strafe(1750, 0.7, 2);
 
         robot.runUsingEncoders(-3350, 1, 5);//3000
 
@@ -93,13 +93,13 @@ public class AutonomousRed extends LinearOpMode {
         robot.runUsingEncoders(-800, 0.8, 3);
         robot.rotate(-87, 1, 2);//-79
         //robot.runUsingEncoders(7300, 1, 9);
-        robot.runUsingEncodersCorrection(robot.conversieCmToTick(2000), 1, 9);
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
+        robot.runUsingEncodersCorrection(7000, 1, 9);//7100
+        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 370) {
             robot.forward(0.3);
             telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
-        robot.rotate(88, 1, 3);
+        robot.rotate(89, 1, 3);
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
 
@@ -126,7 +126,7 @@ public class AutonomousRed extends LinearOpMode {
 //            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
 //            telemetry.update();
         }
-        robot.rotate(88, 1, 3);//
+        robot.rotate(89, 1, 3);//
         conversieCmTick =robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 5);
 
@@ -169,7 +169,7 @@ public class AutonomousRed extends LinearOpMode {
             telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
-        robot.rotate(88, 1, 3);
+        robot.rotate(89, 1, 3);
 
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.5, 4);

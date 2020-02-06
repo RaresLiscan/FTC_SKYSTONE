@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@Autonomous(name = "Mutare fundatie rotire - Albastru")
-
+@Autonomous(name = "Albastru rotire fundatie bridge")
+@Disabled
 public class DragPlatformBlueRotate extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -47,9 +48,18 @@ public class DragPlatformBlueRotate extends LinearOpMode {
 
             robot.runUsingEncoders(700, 0.4, 5);//500
 
-            robot.runUsingEncoders(-3650, 0.7, 5);//3000
+            robot.runUsingEncoders(-300, 0.7, 3);
+
+            robot.strafe(600, 0.7, 2);
+
+            robot.runUsingEncoders(-3350, 0.7, 5);//3000
+
+//            robot.strafe(600, 0.7, 2);
 
             robot.rotate(-83, 0.4, 5);
+
+            robot.ghearaStanga.setPosition(0.23);
+            sleep(1000);
         }
 
     }
