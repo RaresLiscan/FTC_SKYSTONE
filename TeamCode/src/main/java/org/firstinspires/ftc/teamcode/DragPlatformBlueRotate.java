@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @Autonomous(name = "Mutare fundatie rotire - Albastru")
 
 public class DragPlatformBlueRotate extends LinearOpMode {
@@ -21,6 +23,9 @@ public class DragPlatformBlueRotate extends LinearOpMode {
             robot.strafe(-1800, 0.7, 3);//1700
 
             robot.runUsingEncoders(3000, 0.4, 5);//2600
+
+            double conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
+            robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
 
             robot.ridicareBratStanga.setPower(0.8);
             robot.ridicareBratDreapta.setPower(0.8);

@@ -29,11 +29,11 @@ public class AutonomousRed extends LinearOpMode {
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-        robot.rotate(-15, 0.4, 5);//15
+        robot.rotateConstantSpeed(-15, 0.7, 5);//15
 
-        robot.runUsingEncoders(-1750, 0.4, 5);//1800
+        robot.runUsingEncoders(-1700, 0.7, 5);//1800
 
-        robot.rotate(-70, 0.4, 5);//70
+        robot.rotateConstantSpeed(-70, 0.7, 5);//70
 
         robot.ridicareBratDreapta.setPower(-0.8);
         robot.ridicareBratStanga.setPower(-0.8);
@@ -41,15 +41,23 @@ public class AutonomousRed extends LinearOpMode {
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-        robot.runUsingEncoders(1300, 0.4, 5);//500
+        robot.runUsingEncoders(1300, 0.6, 5);//500
         sleep(500);
-        robot.runUsingEncoders(-3650, 0.7, 5);//3000
 
-        robot.rotate(78, 0.7, 5);//-78
+//        robot.strafeCorrectionTest(500, 0.65, 3, telemetry);
 
-        double correction = robot.checkDirection();
-        robot.rotate((int) correction, 0.2, 2);
+        robot.runUsingEncodersCorrection(-200, 1, 2);
 
+        robot.strafe(-600, 0.7, 2);
+
+        robot.runUsingEncoders(-3450, 1, 5);//3000
+
+//        robot.rotate(78, 0.7, 5);//-78
+//
+//        double correction = robot.checkDirection();
+//        robot.rotate((int) correction, 0.2, 2);
+
+        robot.ghearaDreapta.setPosition(0.89);
         sleep(1000);
     }
 
@@ -62,61 +70,61 @@ public class AutonomousRed extends LinearOpMode {
         double correction = robot.checkDirection();
         robot.rotate((int) correction, 0.2, 2);
 
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 65) {
-            robot.forward(-0.15);
-            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            telemetry.update();
-        }
+//        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 65) {
+//            robot.forward(-0.15);
+//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//            telemetry.update();
+//        }
 
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
             robot.forward(0.15);
-            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            telemetry.update();
+//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//            telemetry.update();
         }
 
-        robot.runUsingEncoders(400, 0.3, 3);
+        robot.runUsingEncoders(400, 0.75, 3);
         robot.ghearaStanga.setPosition(0);
         sleep(600);
         robot.ridicareBratStanga.setPower(-0.85);
         sleep(700);
         robot.ridicareBratStanga.setPower(0);
-        robot.runUsingEncoders(-800, 0.5, 3);
-        robot.rotate(-79, 0.7, 2);
+        robot.runUsingEncoders(-800, 0.8, 3);
+        robot.rotate(-87, 1, 2);//-79
         //robot.runUsingEncoders(7300, 1, 9);
-        robot.runUsingEncoders(robot.conversieCmToTick(2000), 1, 9);
+        robot.runUsingEncodersCorrection(robot.conversieCmToTick(2000), 1, 9);
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
             robot.forward(0.3);
             telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
-        robot.rotate(76, 0.7, 3);
+        robot.rotate(90, 1, 3);
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
 
         //robot.runUsingEncoders(800, 0.4, 3);//550
         robot.ghearaStanga.setPosition(0.5);
-        robot.macaraStangaEncoder(-100, 0.7, 2);
+        robot.macaraStangaEncoder(-110, 0.7, 2);
         rotateFundation();
     }
 
     void skystoneLeft() {
-        telemetry.addData("Position: ", "left");
-        telemetry.update();
-        robot.runUsingEncoders(300,0.3, 3);
+//        telemetry.addData("Position: ", "left");
+//        telemetry.update();
+        robot.runUsingEncoders(300,0.6, 3);
         robot.ghearaStanga.setPosition(0);
         sleep(600);
         robot.ridicareBratStanga.setPower(-0.85);
         sleep(700);
         robot.ridicareBratStanga.setPower(0);
-        robot.runUsingEncoders(-700, 0.5, 3);
-        robot.rotate(-79, 0.7, 2);//
-        robot.runUsingEncoders(7300, 0.8, 9);
+        robot.runUsingEncoders(-700, 0.75, 3);
+        robot.rotate(-87, 1, 2);//
+        robot.runUsingEncodersCorrection(7300, 1, 9);
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
             robot.forward(0.3);
-            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            telemetry.update();
+//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//            telemetry.update();
         }
-        robot.rotate(76, 0.7, 3);//
+        robot.rotate(89, 1, 3);//
         conversieCmTick =robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 5);
 
@@ -129,40 +137,40 @@ public class AutonomousRed extends LinearOpMode {
     void noSkystone() {
         telemetry.addData("Position: ", "no skystone");
         telemetry.update();
-        robot.strafe(-950, 0.65, 3);//1000
+        robot.strafe(-910, 0.65, 3);//1000
         double correction = robot.checkDirection();
         robot.rotate((int) correction, 0.2, 2);
 
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
-            robot.forward(0.15);
-            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            telemetry.update();
-        }
+//        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
+//            robot.forward(0.15);
+//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//            telemetry.update();
+//        }
 
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 65) {
             robot.forward(-0.15);
-            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            telemetry.update();
+//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//            telemetry.update();
         }
 
-        robot.runUsingEncoders(350, 0.2, 3);//
+        robot.runUsingEncoders(350, 0.8, 3);//
         robot.ghearaStanga.setPosition(0);
         sleep(600);
         robot.ridicareBratStanga.setPower(-0.85);
         sleep(700);
         robot.ridicareBratStanga.setPower(0);
-        robot.runUsingEncoders(-620, 0.5, 3);
-        robot.rotate(-80, 0.7, 2);
-        robot.runUsingEncoders(8000, 1, 9);
+        robot.runUsingEncoders(-800, 0.8, 3);
+        robot.rotate(-87, 1, 2);
+        robot.runUsingEncodersCorrection(8000, 1, 9);
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
             robot.forward(0.3);
             telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
-        robot.rotate(78, 0.7, 3);
+        robot.rotate(90, 1, 3);
 
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
+        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.5, 4);
 
         //robot.runUsingEncoders(800, 0.4, 3);//550
 
@@ -189,10 +197,10 @@ public class AutonomousRed extends LinearOpMode {
 
             robot.senzorStanga.enableLed(true);
             robot.senzorDreapta.enableLed(true);
-            conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-            conversieCmTick -= 60;
-            telemetry.addData("Distance: ", conversieCmTick);
-            telemetry.update();
+//            conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
+//            conversieCmTick -= 60;
+//            telemetry.addData("Distance: ", conversieCmTick);
+//            telemetry.update();
             robot.ghearaStanga.setPosition(0.5);
             robot.ridicareBratStanga.setPower(0.85);
             robot.scripeteStanga.setPower(0.85);
@@ -202,20 +210,20 @@ public class AutonomousRed extends LinearOpMode {
             //robot.runUsingEncoders(2400, 0.6, 4);//2550
 //            sleep(1000);
 
-            robot.runUsingEncoders(robot.conversieCmToTick(700), 0.9, 4);
+            robot.runUsingEncodersCorrection(robot.conversieCmToTick(700), 0.9, 4);
 
-            // while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 75) {
-            //     robot.forward(0.15);
-            //     telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            //     telemetry.update();
-            // }
+            while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
+                robot.forward(0.15);
+//                 telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//                 telemetry.update();
+            }
 
             // while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 75) {
             //     robot.forward(-0.15);
             //     telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
             //     telemetry.update();
             // }
-            // robot.stopDriving();
+            robot.stopDriving();
 
             sleep(1000);
 
@@ -234,11 +242,9 @@ public class AutonomousRed extends LinearOpMode {
                 skystoneLeft();
             }
             else if (checkSensor(rDreapta, gDreapta, bDreapta)) {
-                //robot.runUsingEncoders(-100, 0.4,3);
                 skystoneRight();
             }
             else {
-                //robot.runUsingEncoders(-100, 0.4,3);
                 noSkystone();
             }
 
