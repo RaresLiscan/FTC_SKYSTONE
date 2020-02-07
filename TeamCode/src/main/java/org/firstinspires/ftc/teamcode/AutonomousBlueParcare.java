@@ -37,13 +37,14 @@ public class AutonomousBlueParcare extends LinearOpMode {
 
         robot.rotateConstantSpeed(70, 0.7, 5);
 
+        robot.runUsingEncoders(1000, 0.7, 5);//500
+
         robot.ridicareBratDreapta.setPower(-0.8);
         robot.ridicareBratStanga.setPower(-0.8);
         sleep(1000);
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-        robot.runUsingEncoders(1000, 0.7, 5);//500
 //        sleep(500);
 
         robot.runUsingEncoders(-200, 1, 3);

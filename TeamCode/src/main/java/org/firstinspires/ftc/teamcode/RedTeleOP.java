@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOP Rosu")
-//@Disabled
+@Disabled
 public class RedTeleOP extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -35,7 +35,7 @@ public class RedTeleOP extends LinearOpMode {
             double x = -gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
 
-            double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle());
+            double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle()) + Math.PI / 2;
             double ipotenuse = Math.sqrt(x * x + y * y);
             double rotate  = gamepad1.right_stick_x * 0.6;
 

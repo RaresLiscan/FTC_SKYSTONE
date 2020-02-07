@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOP Albastru")
-//@Disabled
+@Disabled
 public class BlueTeleOP extends LinearOpMode {
 
     private RobotMap robot = null;

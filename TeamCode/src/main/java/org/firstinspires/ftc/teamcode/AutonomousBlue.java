@@ -38,13 +38,14 @@ public class AutonomousBlue extends LinearOpMode {
 
         robot.rotateConstantSpeed(70, 0.7, 5);
 
+        robot.runUsingEncoders(1000, 0.7, 5);//500
+
         robot.ridicareBratDreapta.setPower(-0.8);
         robot.ridicareBratStanga.setPower(-0.8);
         sleep(1000);
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-        robot.runUsingEncoders(1000, 0.7, 5);//500
 //        sleep(500);
 
         robot.runUsingEncoders(-200, 1, 3);
@@ -190,7 +191,7 @@ public class AutonomousBlue extends LinearOpMode {
 //            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
 //            telemetry.update();
         }
-        robot.rotate(-88, 1, 3);
+        robot.rotate(-87, 1, 3);
 
         // robot.runUsingEncoders(680, 0.4, 3);//550
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);

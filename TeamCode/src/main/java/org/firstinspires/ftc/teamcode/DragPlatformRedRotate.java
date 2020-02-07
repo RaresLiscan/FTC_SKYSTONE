@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@Autonomous(name = "Mutare fundatie rotire - Rosu bridge")
+@Autonomous(name = "Rosu rotire fundatie bridge")
 //@Disabled
 public class DragPlatformRedRotate extends LinearOpMode {
 
@@ -21,7 +21,7 @@ public class DragPlatformRedRotate extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            robot.strafe(1800, 0.7, 3);//1700
+            robot.strafe(1700, 0.7, 3);//1700
 
             robot.runUsingEncoders(2500, 0.4, 5);//2600
 
@@ -30,29 +30,35 @@ public class DragPlatformRedRotate extends LinearOpMode {
 
             robot.ridicareBratStanga.setPower(0.8);
             robot.ridicareBratDreapta.setPower(0.8);
-            sleep(1000);
+            sleep(900);
             robot.ridicareBratStanga.setPower(0);
             robot.ridicareBratDreapta.setPower(0);
 
-            robot.rotate(-15, 0.4, 5);
+            robot.rotateConstantSpeed(-15, 0.7, 5);//15
 
-            robot.runUsingEncoders(-1650, 0.4, 5);//1800
+            robot.runUsingEncoders(-1700, 0.7, 5);//1800
 
-            robot.rotate(-70, 0.4, 5);
+            robot.rotateConstantSpeed(-70, 0.7, 5);//70
+
+            robot.runUsingEncoders(600, 0.6, 5);//500
+            sleep(500);
 
             robot.ridicareBratDreapta.setPower(-0.8);
             robot.ridicareBratStanga.setPower(-0.8);
-            sleep(1000);
+            sleep(900);
             robot.ridicareBratStanga.setPower(0);
             robot.ridicareBratDreapta.setPower(0);
 
-            robot.runUsingEncodersCorrection(700, 0.4, 5);//500
+//        robot.strafeCorrectionTest(500, 0.65, 3, telemetry);
 
-            robot.runUsingEncodersCorrection(-300, 1, 2);
+            robot.runUsingEncoders(-450, 1, 2);
 
-            robot.strafe(-600, 0.7, 2);
+            robot.strafe(-700, 0.7, 2);
 
-            robot.runUsingEncodersCorrection(-3350, 1, 5);//3000
+            robot.runUsingEncoders(-3200, 1, 5);//3000
+
+            robot.ghearaDreapta.setPosition(0.87);
+            sleep(1000);
         }
 
     }

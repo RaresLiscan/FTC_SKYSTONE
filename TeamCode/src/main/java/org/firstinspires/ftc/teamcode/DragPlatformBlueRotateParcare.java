@@ -20,7 +20,9 @@ public class DragPlatformBlueRotateParcare extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            robot.strafe(-1800, 0.7, 3);//1700
+            robot.runUsingEncoders(300, 0.7, 2);
+
+            robot.strafe(-1600, 0.7, 3);//1700
 
             robot.runUsingEncoders(3000, 0.4, 5);//2600
 
@@ -33,11 +35,13 @@ public class DragPlatformBlueRotateParcare extends LinearOpMode {
             robot.ridicareBratStanga.setPower(0);
             robot.ridicareBratDreapta.setPower(0);
 
-            robot.rotate(15, 0.4, 5);
+            robot.rotateConstantSpeed(15, 0.4, 5);
 
-            robot.runUsingEncoders(-1750, 0.4, 5);//1800
+            robot.runUsingEncoders(-1800, 0.4, 5);//1800
 
-            robot.rotate(70, 0.4, 5);
+            robot.rotateConstantSpeed(70, 0.4, 5);
+
+            robot.runUsingEncoders(700, 0.4, 5);//500
 
             robot.ridicareBratDreapta.setPower(-0.8);
             robot.ridicareBratStanga.setPower(-0.8);
@@ -45,17 +49,11 @@ public class DragPlatformBlueRotateParcare extends LinearOpMode {
             robot.ridicareBratStanga.setPower(0);
             robot.ridicareBratDreapta.setPower(0);
 
-            robot.runUsingEncoders(700, 0.4, 5);//500
+            robot.runUsingEncoders(-300, 0.7, 3);
 
-            robot.runUsingEncoders(-300, 0.7, 5);
-
-            robot.strafe(-1600, 0.7, 3);
+            robot.strafe(-1600, 0.7, 2);
 
             robot.runUsingEncoders(-3350, 0.7, 5);//3000
-
-            robot.strafe(-600, 0.7, 2);
-
-            robot.rotate(-83, 0.4, 5);
 
             robot.ghearaStanga.setPosition(0.23);
             sleep(1000);

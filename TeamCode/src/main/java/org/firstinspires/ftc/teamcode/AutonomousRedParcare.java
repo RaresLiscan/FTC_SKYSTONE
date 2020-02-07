@@ -33,9 +33,12 @@ public class AutonomousRedParcare extends LinearOpMode {
 
         robot.rotateConstantSpeed(-15, 0.7, 5);//15
 
-        robot.runUsingEncoders(-1700, 0.7, 5);//1800
+        robot.runUsingEncoders(-1550, 0.7, 5);//1800
 
         robot.rotateConstantSpeed(-70, 0.7, 5);//70
+
+        robot.runUsingEncoders(1300, 0.6, 5);//500
+        sleep(500);
 
         robot.ridicareBratDreapta.setPower(-0.8);
         robot.ridicareBratStanga.setPower(-0.8);
@@ -43,16 +46,13 @@ public class AutonomousRedParcare extends LinearOpMode {
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-        robot.runUsingEncoders(1300, 0.6, 5);//500
-        sleep(500);
-
 //        robot.strafeCorrectionTest(500, 0.65, 3, telemetry);
 
-        robot.runUsingEncodersCorrection(-300, 1, 2);
+        robot.runUsingEncoders(-800, 1, 2);
 
-        robot.strafe(1750, 0.7, 2);
+        robot.strafe(1600, 0.7, 2);
 
-        robot.runUsingEncoders(-3350, 1, 5);//3000
+        robot.runUsingEncoders(-2800, 1, 5);//3000
 
 //        robot.rotate(78, 0.7, 5);//-78
 //
@@ -68,21 +68,28 @@ public class AutonomousRedParcare extends LinearOpMode {
         telemetry.addData("Position: ", "right");
         telemetry.update();
         //robot.runUsingEncoders(-100, 0.4,3);
-        robot.strafe(950, 0.65, 3);//1000
+
+        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 85) {
+            robot.forward(-0.15);
+//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//            telemetry.update();
+        }
+
+        robot.stopDriving();
+
+        robot.strafe(925, 0.65, 3);//1000
         double correction = robot.checkDirection();
         robot.rotate((int) correction, 0.2, 2);
 
-//        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 65) {
-//            robot.forward(-0.15);
-//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//            telemetry.update();
-//        }
+
 
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
             robot.forward(0.15);
 //            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
 //            telemetry.update();
         }
+
+        robot.stopDriving();
 
         robot.runUsingEncoders(400, 0.75, 3);
         robot.ghearaStanga.setPosition(0);
@@ -91,21 +98,22 @@ public class AutonomousRedParcare extends LinearOpMode {
         sleep(700);
         robot.ridicareBratStanga.setPower(0);
         robot.runUsingEncoders(-800, 0.8, 3);
-        robot.rotate(-87, 1, 2);//-79
+        robot.rotate(-85, 1, 2);//-79
         //robot.runUsingEncoders(7300, 1, 9);
-        robot.runUsingEncodersCorrection(7000, 1, 9);//7100
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 370) {
+        robot.runUsingEncodersCorrection(robot.conversieCmToTick(1960), 1, 9);
+        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
             robot.forward(0.3);
-            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            telemetry.update();
+//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
+//            telemetry.update();
         }
-        robot.rotate(89, 1, 3);
+        robot.stopDriving();
+        robot.rotate(88, 1, 3);
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
 
         //robot.runUsingEncoders(800, 0.4, 3);//550
         robot.ghearaStanga.setPosition(0.5);
-        robot.macaraStangaEncoder(-110, 0.7, 2);
+        robot.macaraStangaEncoder(-95, 0.7, 2);
         rotateFundation();
     }
 
@@ -119,20 +127,20 @@ public class AutonomousRedParcare extends LinearOpMode {
         sleep(700);
         robot.ridicareBratStanga.setPower(0);
         robot.runUsingEncoders(-700, 0.75, 3);
-        robot.rotate(-87, 1, 2);//
-        robot.runUsingEncodersCorrection(7300, 1, 9);
+        robot.rotate(-85, 1, 2);//
+        robot.runUsingEncodersCorrection(robot.conversieCmToTick(1980), 1, 9);
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
             robot.forward(0.4);
 //            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
 //            telemetry.update();
         }
-        robot.rotate(89, 1, 3);//
+        robot.rotate(88, 1, 3);//
         conversieCmTick =robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 5);
 
         //robot.runUsingEncoders(800, 0.5, 3);//550
         robot.ghearaStanga.setPosition(0.5);
-        robot.macaraStangaEncoder(-110, 0.7, 2);
+        robot.macaraStangaEncoder(-95, 0.7, 2);
         rotateFundation();
     }
 
@@ -154,6 +162,7 @@ public class AutonomousRedParcare extends LinearOpMode {
 //            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
 //            telemetry.update();
         }
+        robot.stopDriving();
 
         robot.runUsingEncoders(350, 0.8, 3);//
         robot.ghearaStanga.setPosition(0);
@@ -162,14 +171,15 @@ public class AutonomousRedParcare extends LinearOpMode {
         sleep(700);
         robot.ridicareBratStanga.setPower(0);
         robot.runUsingEncoders(-800, 0.8, 3);
-        robot.rotate(-87, 1, 2);
-        robot.runUsingEncodersCorrection(7900, 1, 9);
+        robot.rotate(-85, 1, 2);
+        robot.runUsingEncodersCorrection(robot.conversieCmToTick(2000), 1, 9);
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
             robot.forward(0.4);
             telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
-        robot.rotate(89, 1, 3);
+        robot.stopDriving();
+        robot.rotate(88, 1, 3);
 
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
         robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.5, 4);
@@ -177,11 +187,10 @@ public class AutonomousRedParcare extends LinearOpMode {
         //robot.runUsingEncoders(800, 0.4, 3);//550
 
         robot.ghearaStanga.setPosition(0.5);
-        robot.macaraStangaEncoder(-110, 0.7, 2);
+        robot.macaraStangaEncoder(-95, 0.7, 2);
         rotateFundation();
 
     }
-
 
 
 
@@ -205,7 +214,7 @@ public class AutonomousRedParcare extends LinearOpMode {
 //            telemetry.update();
             robot.ghearaStanga.setPosition(0.5);
             robot.ridicareBratStanga.setPower(0.5);
-            robot.scripeteStanga.setPower(0.5);
+            robot.scripeteStanga.setPower(0.4);
             sleep(1000);
             robot.ridicareBratStanga.setPower(0);
             robot.scripeteStanga.setPower(0);
