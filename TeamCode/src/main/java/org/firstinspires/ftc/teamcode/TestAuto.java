@@ -12,7 +12,7 @@ public class TestAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
         waitForStart();
 
         if (opModeIsActive()) {

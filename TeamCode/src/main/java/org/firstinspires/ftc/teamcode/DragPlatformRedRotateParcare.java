@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous(name = "Rosu rotire fundatie perete")
-//@Disabled
+@Disabled
 public class DragPlatformRedRotateParcare extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -15,7 +15,7 @@ public class DragPlatformRedRotateParcare extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
         robot.zeroPowerBeh();
         waitForStart();
 

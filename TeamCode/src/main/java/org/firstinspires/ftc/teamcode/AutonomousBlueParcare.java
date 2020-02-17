@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @Autonomous(name = "Albastru completa perete")
-//@Disabled
+@Disabled
 public class AutonomousBlueParcare extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -208,7 +208,7 @@ public class AutonomousBlueParcare extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
         robot.zeroPowerBeh();
         waitForStart();
 

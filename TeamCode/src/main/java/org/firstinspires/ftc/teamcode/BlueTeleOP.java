@@ -16,7 +16,7 @@ public class BlueTeleOP extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         ElapsedTime runtime = new ElapsedTime();
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
         waitForStart();
 
         robot.ghearaStanga.setPosition(0);

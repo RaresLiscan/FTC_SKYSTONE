@@ -13,7 +13,7 @@ public class BlueAutonomous1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
         waitForStart();
 
         if (opModeIsActive()) {

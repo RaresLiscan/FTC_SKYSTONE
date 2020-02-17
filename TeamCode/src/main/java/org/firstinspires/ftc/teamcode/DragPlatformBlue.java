@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "Mutare fundatie - Albastru")
+@Autonomous(name = "Albastru mutare fundatie")
 @Disabled
 public class DragPlatformBlue extends LinearOpMode {
 
@@ -17,7 +17,7 @@ public class DragPlatformBlue extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
         robot.zeroPowerBeh();
         waitForStart();
 

@@ -5,6 +5,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -38,9 +39,10 @@ public class RobotMap {
     public ColorSensor senzorDreapta;
     public ModernRoboticsI2cRangeSensor senzorDistanta;
     public Rev2mDistanceSensor senzorDistantaRev;
+    private LinearOpMode opMode;
 
 
-    public RobotMap (HardwareMap hardwareMap) {
+    public RobotMap (HardwareMap hardwareMap, LinearOpMode opMode) {
         stangaFata = hardwareMap.get(DcMotor.class, "stangaFata");
         dreaptaFata = hardwareMap.get(DcMotor.class, "dreaptaFata");
         stangaSpate = hardwareMap.get(DcMotor.class, "stangaSpate");
@@ -75,6 +77,8 @@ public class RobotMap {
         imu.initialize(parameters);
 
         while (imu.isGyroCalibrated());
+
+        this.opMode = opMode;
 
 //        telemetry.addData("Mode", "calibrating...");
 //        telemetry.update();
@@ -149,7 +153,7 @@ public class RobotMap {
 
         runtime.reset();
 
-        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = maintainAngle();
             correction = Math.toRadians(correction);
 
@@ -192,7 +196,7 @@ public class RobotMap {
 
         runtime.reset();
 
-        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             if (p < power) p += 0.05;
             stangaFata.setPower(p);
             stangaSpate.setPower(p);
@@ -219,7 +223,7 @@ public class RobotMap {
         scripeteDreapta.setPower(power);
 
         runtime.reset();
-        while (scripeteDreapta.isBusy() && runtime.seconds() < timeout);
+        while (scripeteDreapta.isBusy() && runtime.seconds() < timeout && opMode.opModeIsActive());
 
         scripeteDreapta.setPower(0);
 
@@ -241,7 +245,7 @@ public class RobotMap {
         scripeteStanga.setPower(power);
 
         runtime.reset();
-        while (scripeteStanga.isBusy() && runtime.seconds() < timeout);
+        while (scripeteStanga.isBusy() && runtime.seconds() < timeout && opMode.opModeIsActive());
 
         scripeteStanga.setPower(0);
 
@@ -265,7 +269,7 @@ public class RobotMap {
         scripeteDreapta.setPower(power);
 
         runtime.reset();
-        while (scripeteDreapta.isBusy() && scripeteStanga.isBusy() && runtime.seconds() < timeout);
+        while (scripeteDreapta.isBusy() && scripeteStanga.isBusy() && runtime.seconds() < timeout && opMode.opModeIsActive());
 
         scripeteStanga.setPower(0);
         scripeteDreapta.setPower(0);
@@ -304,7 +308,7 @@ public class RobotMap {
 
         runtime.reset();
 
-        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = checkDirection();
             correction = Math.toRadians(correction);
 
@@ -356,7 +360,7 @@ public class RobotMap {
 
         runtime.reset();
 
-        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = maintainAngle();
             correction = Math.toRadians(correction);
 
@@ -403,7 +407,7 @@ public class RobotMap {
 
         runtime.reset();
 
-        while (stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = maintainAngle();
             correction = Math.toRadians(correction);
 
@@ -539,9 +543,9 @@ public class RobotMap {
         if (degrees < 0)
         {
             // On right turn we have to get off zero first.
-            while (getAngle() == 0) { }
+            while (opMode.opModeIsActive() && getAngle() == 0) { }
 
-            while (getAngle() > degrees) {
+            while (opMode.opModeIsActive() && getAngle() > degrees) {
                 if (getAngle() <= degrees / 2 && first) {
                     power /= 2;
                     first = false;
@@ -557,7 +561,7 @@ public class RobotMap {
             }
         }
         else    // left turn.
-            while (getAngle() < degrees) {
+            while (opMode.opModeIsActive() && getAngle() < degrees) {
                 if (getAngle() >= degrees / 2 && first) {
                     power /= 2;
                     first = false;
@@ -627,12 +631,12 @@ public class RobotMap {
         if (degrees < 0)
         {
             // On right turn we have to get off zero first.
-            while (getAngle() == 0) { }
+            while (opMode.opModeIsActive() && getAngle() == 0) { }
 
-            while (getAngle() > degrees) {}
+            while (opMode.opModeIsActive() && getAngle() > degrees) {}
         }
         else    // left turn.
-            while (getAngle() < degrees) {}
+            while (opMode.opModeIsActive() && getAngle() < degrees) {}
 
         // turn the motors off.
         stopDriving();

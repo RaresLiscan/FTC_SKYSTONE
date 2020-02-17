@@ -154,7 +154,7 @@ public class TensorflowAutonomous extends LinearOpMode {
             tfod.activate();
         }
 
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");

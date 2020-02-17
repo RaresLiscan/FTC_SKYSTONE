@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous(name = "Albastru completa brigde")
-//@Disabled
+@Disabled
 public class AutonomousBlue extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -209,7 +209,7 @@ public class AutonomousBlue extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robot = new RobotMap(hardwareMap);
+        robot = new RobotMap(hardwareMap, this);
         robot.zeroPowerBeh();
         waitForStart();
 
