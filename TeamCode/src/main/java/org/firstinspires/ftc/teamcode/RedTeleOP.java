@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class RedTeleOP extends LinearOpMode {
 
     private RobotMap robot = null;
+    private final double DELAY = 0.2;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -28,28 +29,20 @@ public class RedTeleOP extends LinearOpMode {
             /** GAMEPAD 1 */
 
             //Miscarea sasiului
-//            double rotate = -gamepad1.right_stick_x;
-//            double strafe =  gamepad1.left_stick_x;
-//            double forward = gamepad1.left_stick_y;
 
             double x = -gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
 
             double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle()) + Math.PI / 2;
             double ipotenuse = Math.sqrt(x * x + y * y);
-            double rotate  = gamepad1.right_stick_x * 0.6;
+            double rotate  = gamepad1.right_stick_x * 0.50;
+            double strafe  = Math.sin(direction) * ipotenuse;
+            double forward = Math.cos(direction) * ipotenuse;
 
-//            if (rotate != 0) robot.newAngle();
-//            double correction = robot.maintainAngle();
-//            correction = Math.toRadians(correction);
-
-            double strafe  = Math.sin(direction) * ipotenuse * 0.6;
-            double forward = Math.cos(direction) * ipotenuse * 0.9;
-
-            double sS = -strafe - forward - rotate;
-            double dF =  strafe + forward - rotate;
-            double sF =  strafe - forward - rotate;
-            double dS = -strafe + forward - rotate;
+            double sS = robot.SQRT(-strafe - forward - rotate);
+            double dF = robot.SQRT(strafe + forward - rotate);
+            double sF = robot.SQRT(strafe - forward - rotate);
+            double dS = robot.SQRT(-strafe + forward - rotate);
 
 
             robot.stangaSpate.setPower(sS);
@@ -75,15 +68,6 @@ public class RedTeleOP extends LinearOpMode {
             }
             else if (!gamepad2.right_bumper && gamepad2.right_trigger == 0) robot.scripeteDreapta.setPower(0);
 
-
-            //Prinderea mineralului
-            if (gamepad1.dpad_down) {
-                robot.ghearaDreapta.setPosition(0.5);
-            }
-            else if (gamepad1.dpad_up) {
-                robot.ghearaDreapta.setPosition(1);
-            }
-
             //Ridicarea scripetelui din stanga
             if (gamepad1.right_bumper) {
                 robot.scripeteStanga.setPower(-raisePower);
@@ -96,12 +80,25 @@ public class RedTeleOP extends LinearOpMode {
 
 
             //Prinderea capstone-ului
-            if (gamepad1.a) {
-                robot.ghearaStanga.setPosition(0.5);
+            if (gamepad1.right_stick_button && runtime.seconds() >= DELAY) {
+                if (robot.ghearaDreapta.getPosition() == 0.5) {
+                    robot.ghearaDreapta.setPosition(1);
+                }
+                else {
+                    robot.ghearaDreapta.setPosition(0.5);
+                }
+                runtime.reset();
             }
-            if (gamepad1.y) {
-                robot.ghearaStanga.setPosition(0);
+            else if (gamepad1.left_stick_button && runtime.seconds() >= DELAY) {
+                if (robot.ghearaStanga.getPosition() == 0.5) {
+                    robot.ghearaStanga.setPosition(0);
+                }
+                else {
+                    robot.ghearaStanga.setPosition(0.5);
+                }
+                runtime.reset();
             }
+
 
             //Resetare unghi
             if (gamepad1.x){

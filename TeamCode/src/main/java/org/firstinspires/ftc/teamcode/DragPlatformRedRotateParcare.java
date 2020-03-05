@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous(name = "Rosu rotire fundatie perete")
-@Disabled
+ @Disabled
 public class DragPlatformRedRotateParcare extends LinearOpMode {
 
     private RobotMap robot = null;
@@ -16,48 +17,54 @@ public class DragPlatformRedRotateParcare extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new RobotMap(hardwareMap, this);
-        robot.zeroPowerBeh();
+        // robot.zeroPowerBeh();
         waitForStart();
 
         if (opModeIsActive()) {
-            robot.strafe(1700, 0.7, 3);//1700
 
-            robot.runUsingEncoders(2500, 0.4, 5);//2600
+            robot.runUsingEncoders(robot.conversieCmToTick(100), 0.4, 1);
+
+            robot.strafe(845, 0.5, 3);//870
+
+            double correction = robot.maintainAngle();
+            telemetry.addData("Correction: ", correction);
+            telemetry.update();
+            robot.rotateEncoders(robot.conversieDegreesToTicks(correction - 3), 1 , 1);
+
+            robot.runUsingEncoders(robot.conversieCmToTick(600), 0.5, 3);//2600
 
             double conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-            robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
+            robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.3, 3);
 
             robot.ridicareBratStanga.setPower(0.8);
             robot.ridicareBratDreapta.setPower(0.8);
-            sleep(900);
+            sleep(700);
             robot.ridicareBratStanga.setPower(0);
             robot.ridicareBratDreapta.setPower(0);
 
-            robot.rotateConstantSpeed(-15, 0.7, 5);//15
+            robot.rotateConstantSpeed(-15, 1, 5);//15
 
-            robot.runUsingEncoders(-1700, 0.7, 5);//1800
+            robot.runUsingEncoders(-robot.conversieCmToTick(390), 1, 2);//1800
 
-            robot.rotateConstantSpeed(-70, 0.7, 5);//70
+            robot.rotateConstantSpeed(-61, 1, 5);//70
 
-            robot.runUsingEncoders(600, 0.6, 5);//500
-            sleep(500);
+            robot.runUsingEncoders(robot.conversieCmToTick(470), 0.5, 2);//500
 
-            robot.ridicareBratDreapta.setPower(-0.8);
-            robot.ridicareBratStanga.setPower(-0.8);
-            sleep(900);
+            robot.ridicareBratDreapta.setPower(-0.85);
+            robot.ridicareBratStanga.setPower(-0.85);
+
+            robot.runUsingEncoders(-robot.conversieCmToTick(100), 1, 3);
+
             robot.ridicareBratStanga.setPower(0);
             robot.ridicareBratDreapta.setPower(0);
 
-//        robot.strafeCorrectionTest(500, 0.65, 3, telemetry);
+            robot.strafe(1300, 1, 3);
 
-            robot.runUsingEncoders(-450, 1, 2);
+            correction = robot.maintainAngle();
+            robot.rotateEncoders(robot.conversieDegreesToTicks(correction), 1, 1);
 
-            robot.strafe(1600, 0.7, 2);
+            robot.runUsingEncoders(-robot.conversieCmToTick(850), 1, 3);//3000
 
-            robot.runUsingEncoders(-3200, 1, 5);//3000
-
-            robot.ghearaDreapta.setPosition(0.87);
-            sleep(1000);
         }
 
     }

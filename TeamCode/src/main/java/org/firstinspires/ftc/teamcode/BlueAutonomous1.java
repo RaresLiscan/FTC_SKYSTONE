@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Disabled
 public class BlueAutonomous1 extends LinearOpMode {
 
-    RobotMap robot = null;
+    private RobotMap robot = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,14 +20,13 @@ public class BlueAutonomous1 extends LinearOpMode {
 
             robot.runUsingEncoders(350, 1, 2);
 
-            robot.strafe(-1700, 0.6, 3);
+            robot.strafe(-700, 0.6, 3);
 
-            robot.rotate(-85, 1, 2);
+            robot.runUsingEncoders(-100, 1, 1);
 
-            robot.strafe(450, 0.7, 2);
+            double correction = robot.maintainAngle();
+            robot.rotateEncoders(robot.conversieDegreesToTicks(correction + 90), 1, 1);
 
-            robot.ghearaStanga.setPosition(0.23);
-            sleep(1000);
         }
 
     }

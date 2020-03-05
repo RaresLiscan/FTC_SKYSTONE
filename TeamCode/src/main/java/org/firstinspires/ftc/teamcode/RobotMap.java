@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class RobotMap {
@@ -38,6 +39,10 @@ public class RobotMap {
     public ColorSensor senzorStanga;
     public ColorSensor senzorDreapta;
     public ModernRoboticsI2cRangeSensor senzorDistanta;
+    public Rev2mDistanceSensor senzorFataStanga;
+    public Rev2mDistanceSensor senzorFataDreapta;
+    public Rev2mDistanceSensor senzorLateralaStanga;
+    public Rev2mDistanceSensor senzorLateralaDreapta;
     public Rev2mDistanceSensor senzorDistantaRev;
     private LinearOpMode opMode;
 
@@ -49,6 +54,8 @@ public class RobotMap {
         dreaptaSpate = hardwareMap.get(DcMotor.class, "dreaptaSpate");
         scripeteStanga = hardwareMap.get(DcMotor.class, "scripeteStanga");
         scripeteDreapta = hardwareMap.get(DcMotor.class, "scripeteDreapta");
+        scripeteStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        scripeteDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ridicareBratStanga = hardwareMap.get(DcMotor.class, "ridicareBratStanga");
         ridicareBratDreapta = hardwareMap.get(DcMotor.class, "ridicareBratDreapta");
         ghearaDreapta = hardwareMap.get(Servo.class, "ghearaDreapta");
@@ -61,8 +68,13 @@ public class RobotMap {
         senzorStanga = hardwareMap.get(ColorSensor.class, "senzorSt");
         senzorDreapta.enableLed(false);
         senzorStanga.enableLed(false);
-        senzorDistanta = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "senzorDistanta");
-        senzorDistantaRev = hardwareMap.get(Rev2mDistanceSensor.class, "senzorDistantaRev");
+//        senzorDistanta = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "senzorDistanta");
+//        senzorDistantaRev = hardwareMap.get(Rev2mDistanceSensor.class, "senzorDistantaRev");
+        senzorFataDreapta = hardwareMap.get(Rev2mDistanceSensor.class, "senzorFataDreapta");
+        senzorFataStanga = hardwareMap.get(Rev2mDistanceSensor.class, "senzorFataStanga");
+        senzorLateralaDreapta = hardwareMap.get(Rev2mDistanceSensor.class, "senzorLateralaDreapta");
+        senzorLateralaStanga = hardwareMap.get(Rev2mDistanceSensor.class, "senzorLateralaStanga");
+
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -91,6 +103,11 @@ public class RobotMap {
         dreaptaFata.setPower(dF);
     }
 
+    public double SQRT(double x) {
+        if (x < 0) return -Math.sqrt(Math.abs(x));
+        return Math.sqrt(x);
+    }
+
     public void forward(double power) {
 
 
@@ -114,13 +131,7 @@ public class RobotMap {
 
     public int conversieCmToTick(double distance){
         // return (int) (distance/(3529/1000)) + 100;
-        return (int) (distance * 3.559);
-    }
-
-    public int cmToTicks (double distance) {
-        //Distance is in cm
-        double wheelDiameter = 10, gearRatio = 2, motorTicks = 1120;
-        return (int) (distance / (wheelDiameter * Math.PI) * motorTicks * gearRatio);
+        return (int) (distance * 1.538);
     }
 
     public void runUsingEncodersCorrection (int distance, double power, double timeout) {
@@ -130,6 +141,8 @@ public class RobotMap {
         stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
 
         stangaFata.setTargetPosition(-distance);
         stangaSpate.setTargetPosition(-distance);
@@ -146,36 +159,84 @@ public class RobotMap {
 
         double p = 0;
 
-        stangaFata.setPower(p - correction);
-        stangaSpate.setPower(p - correction);
-        dreaptaFata.setPower(p + correction);
-        dreaptaSpate.setPower(p + correction);
+        stangaFata.setPower(p + correction);
+        stangaSpate.setPower(p + correction);
+        dreaptaFata.setPower(p - correction);
+        dreaptaSpate.setPower(p - correction);
 
         runtime.reset();
 
         while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = maintainAngle();
-            correction = Math.toRadians(correction);
+            correction = Math.toRadians(correction) * 2;
 
             if (p < power) p += 0.05;
 
-            stangaFata.setPower(p - correction);
-            stangaSpate.setPower(p - correction);
-            dreaptaFata.setPower(p + correction);
-            dreaptaSpate.setPower(p + correction);
+            stangaFata.setPower(p + correction);
+            stangaSpate.setPower(p + correction);
+            dreaptaFata.setPower(p - correction);
+            dreaptaSpate.setPower(p - correction);
         }
 
         stopDriving();
 
     }
 
-    public void runUsingEncoders (int distance, double power, double timeout) {
+    public void rotateEncoders(int ticks, double power, double timeout) {
         ElapsedTime runtime = new ElapsedTime();
 
         stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
+
+        stangaFata.setTargetPosition(ticks);
+        stangaSpate.setTargetPosition(ticks);
+        dreaptaFata.setTargetPosition(ticks);
+        dreaptaSpate.setTargetPosition(ticks);
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double p = 0.05;
+
+        stangaFata.setPower(p);
+        stangaSpate.setPower(p);
+        dreaptaFata.setPower(p);
+        dreaptaSpate.setPower(p);
+
+        runtime.reset();
+
+        while (opMode.opModeIsActive() && stangaFata.isBusy() && dreaptaFata.isBusy() && stangaSpate.isBusy() && dreaptaSpate.isBusy() && runtime.seconds() < timeout) {
+            if (p < power) p += 0.05;
+
+            stangaFata.setPower(p);
+            stangaSpate.setPower(p);
+            dreaptaFata.setPower(p);
+            dreaptaSpate.setPower(p);
+        }
+
+        stopDriving();
+
+    }
+
+    public int conversieDegreesToTicks(double degrees) {
+        return (int) ((int) degrees * 8.56);
+    }
+
+    public void runUsingEncodersLongRun(int distance, double power, double timeout) {
+        ElapsedTime runtime = new ElapsedTime();
+
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
 
         stangaFata.setTargetPosition(-distance);
         stangaSpate.setTargetPosition(-distance);
@@ -202,6 +263,59 @@ public class RobotMap {
             stangaSpate.setPower(p);
             dreaptaFata.setPower(p);
             dreaptaSpate.setPower(p);
+
+            if (stangaSpate.getCurrentPosition() >= 6 * distance / 7) {
+                power /= 2;
+                p /= 2;
+            }
+
+        }
+
+        stopDriving();
+
+    }
+
+    public void runUsingEncoders (int distance, double power, double timeout) {
+        ElapsedTime runtime = new ElapsedTime();
+
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
+
+        stangaFata.setTargetPosition(-distance);
+        stangaSpate.setTargetPosition(-distance);
+        dreaptaFata.setTargetPosition(distance);
+        dreaptaSpate.setTargetPosition(distance);
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double p = 0.05;
+
+        stangaFata.setPower(p);
+        stangaSpate.setPower(p);
+        dreaptaFata.setPower(p);
+        dreaptaSpate.setPower(p);
+
+        runtime.reset();
+
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+            if (p < power) p += 0.05;
+            stangaFata.setPower(p);
+            stangaSpate.setPower(p);
+            dreaptaFata.setPower(p);
+            dreaptaSpate.setPower(p);
+
+//            if (stangaSpate.getCurrentPosition() >= 6 * distance / 7) {
+//                power /= 2;
+//                p /= 2;
+//            }
+
         }
 
         stopDriving();
@@ -238,6 +352,8 @@ public class RobotMap {
 
         scripeteStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        opMode.sleep(50);
+
         scripeteStanga.setTargetPosition(ticks);
 
         scripeteStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -258,6 +374,8 @@ public class RobotMap {
 
         scripeteDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         scripeteStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
 
         scripeteStanga.setTargetPosition(ticks);
         scripeteDreapta.setTargetPosition(ticks);
@@ -291,6 +409,8 @@ public class RobotMap {
         dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        opMode.sleep(50);
+
         stangaFata.setTargetPosition(-distance);
         stangaSpate.setTargetPosition(distance);
         dreaptaFata.setTargetPosition(-distance);
@@ -311,6 +431,7 @@ public class RobotMap {
         while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = checkDirection();
             correction = Math.toRadians(correction);
+            correction = Math.sin(correction);
 
             stangaSpate .setPower(power  + correction);
             stangaFata  .setPower(power  - correction);
@@ -335,10 +456,14 @@ public class RobotMap {
 
         ElapsedTime runtime = new ElapsedTime();
 
+        prevAngle = getAngle();
+
         stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
 
         stangaFata.setTargetPosition(-distance);
         stangaSpate.setTargetPosition(distance);
@@ -353,26 +478,74 @@ public class RobotMap {
 
         double p = 0.05;
 
-        stangaFata.setPower(p);
-        stangaSpate.setPower(p);
-        dreaptaFata.setPower(p);
-        dreaptaSpate.setPower(p);
+        stangaFata.setPower(power);
+        stangaSpate.setPower(power);
+        dreaptaFata.setPower(power);
+        dreaptaSpate.setPower(power);
 
         runtime.reset();
 
         while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             correction = maintainAngle();
+            opMode.telemetry.addData("Correction angle: ", correction);
+            opMode.telemetry.update();
             correction = Math.toRadians(correction);
+//            if (Math.sin(correction) > 0) correction = Math.min(2 * Math.sin(correction), 1);
+//            else if (Math.sin(correction) < 0) correction = Math.max(2 * Math.sin(correction), -1);
+            correction = 2 * Math.sin(correction);
 
             if (p < power) p += 0.05;
 
-            stangaSpate .setPower(p + correction);
-            stangaFata  .setPower(p - correction);
-            dreaptaSpate.setPower(p - correction);
-            dreaptaFata .setPower(p + correction);
+
+            if (correction > 0) {
+                if (distance > 0) {
+//                    stangaSpate .setPower(Math.max(power + correction, 1));
+//                    stangaFata  .setPower(Math.max(power - correction, 0));
+//                    dreaptaSpate.setPower(Math.max(power + correction, 1));
+//                    dreaptaFata .setPower(Math.max(power - correction, 0));
+                    stangaSpate .setPower(power);
+                    stangaFata  .setPower(Math.max(power - correction, 0));
+                    dreaptaSpate.setPower(power);
+                    dreaptaFata .setPower(Math.max(power - correction, 0));
+                }
+                else {
+//                    stangaSpate .setPower(Math.max(power - correction, 0));
+//                    stangaFata  .setPower(Math.max(power + correction, 1));
+//                    dreaptaSpate.setPower(Math.max(power - correction, 0));
+//                    dreaptaFata .setPower(Math.max(power + correction, 1));
+                    stangaSpate .setPower(Math.max(power - correction, 0));
+                    stangaFata  .setPower(power);
+                    dreaptaSpate.setPower(Math.max(power - correction, 0));
+                    dreaptaFata .setPower(power);
+                }
+            }
+            else {
+                if (distance < 0) {
+//                    stangaSpate .setPower(Math.max(power - correction, 1));
+//                    stangaFata  .setPower(Math.max(power + correction, 0));
+//                    dreaptaSpate.setPower(Math.max(power - correction, 1));
+//                    dreaptaFata .setPower(Math.max(power + correction, 0));
+                    stangaSpate .setPower(power);
+                    stangaFata  .setPower(Math.max(power + correction, 0));
+                    dreaptaSpate.setPower(power);
+                    dreaptaFata .setPower(Math.max(power + correction, 0));
+
+                }
+                else {
+//                    stangaSpate .setPower(Math.max(power + correction, 0));
+//                    stangaFata  .setPower(Math.max(power - correction, 1));
+//                    dreaptaSpate.setPower(Math.max(power + correction, 0));
+//                    dreaptaFata .setPower(Math.max(power - correction, 1));
+                    stangaSpate .setPower(Math.max(power + correction, 0));
+                    stangaFata  .setPower(power);
+                    dreaptaSpate.setPower(Math.max(power + correction, 0));
+                    dreaptaFata .setPower(power);
+                }
+            }
         }
 
         stopDriving();
+
     }
 
     public void strafeConstantSpeed (int distance, double power, int timeout) {
@@ -386,6 +559,8 @@ public class RobotMap {
         stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
 
         stangaFata.setTargetPosition(-distance);
         stangaSpate.setTargetPosition(distance);
@@ -424,10 +599,17 @@ public class RobotMap {
 
 
     public void stopDriving() {
+
+
         stangaFata.setPower(0);
         stangaSpate.setPower(0);
         dreaptaFata.setPower(0);
         dreaptaSpate.setPower(0);
+
+        stangaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        stangaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void resetAngle()
@@ -585,6 +767,137 @@ public class RobotMap {
 
         // reset angle tracking on new heading.
         resetAngle();
+    }
+
+    public void strafeUsingSensors(double targetDistance, double power, double timeout) {
+        ElapsedTime runtime = new ElapsedTime();
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if (power > 0) { //dreapta
+            while (senzorLateralaDreapta.getDistance(DistanceUnit.CM) > targetDistance && runtime.seconds() < timeout) {
+                stangaFata.setPower(-power);
+                dreaptaFata.setPower(-power);
+                stangaSpate.setPower(power);
+                dreaptaSpate.setPower(power);
+            }
+        }
+        else {
+            while (senzorLateralaStanga.getDistance(DistanceUnit.CM) > targetDistance && runtime.seconds() < timeout) {
+                stangaFata.setPower(-power);
+                dreaptaFata.setPower(-power);
+                stangaSpate.setPower(power);
+                dreaptaSpate.setPower(power);
+            }
+        }
+        stopDriving();
+    }
+
+    public void runUsingSensors(double targetDistance, double power, double timeout) {
+        ElapsedTime runtime = new ElapsedTime();
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        runtime.reset();
+        while (senzorFataStanga.getDistance(DistanceUnit.CM) > targetDistance && senzorFataDreapta.getDistance(DistanceUnit.CM) > targetDistance && runtime.seconds() < timeout) {
+            stangaFata.setPower(-power);
+            dreaptaFata.setPower(power);
+            stangaSpate.setPower(-power);
+            dreaptaSpate.setPower(power);
+        }
+        stopDriving();
+    }
+
+    public void drive45degreeStanga(int distance, double power, double timeout){
+        ElapsedTime runtime = new ElapsedTime();
+
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        opMode.sleep(50);
+
+        stangaSpate.setTargetPosition(-distance);
+        dreaptaFata.setTargetPosition(distance);
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double p = 0.05;
+
+        stangaSpate.setPower(p);
+        dreaptaFata.setPower(p);
+        stangaFata.setPower(0);
+        dreaptaSpate.setPower(0);
+
+        runtime.reset();
+
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+            if (p < power) p += 0.05;
+            stangaSpate.setPower(p);
+            dreaptaFata.setPower(p);
+
+//            if (stangaSpate.getCurrentPosition() >= 6 * distance / 7) {
+//                power /= 2;
+//                p /= 2;
+//            }
+
+        }
+
+        stopDriving();
+    }
+
+    public void drive45degreeDreapta(int distance, double power, double timeout){
+        ElapsedTime runtime = new ElapsedTime();
+
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        opMode.sleep(50);
+
+        stangaFata.setTargetPosition(-distance);
+        dreaptaSpate.setTargetPosition(distance);
+        dreaptaFata.setTargetPosition(-500);
+        stangaSpate.setTargetPosition(500);
+
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double p = 0.05;
+
+        stangaFata.setPower(p);
+        dreaptaSpate.setPower(p);
+        stangaFata.setPower(0);
+        dreaptaSpate.setPower(0);
+
+        runtime.reset();
+
+        while (opMode.opModeIsActive() && stangaFata.isBusy() && dreaptaSpate.isBusy() && runtime.seconds() < timeout) {
+            if (p < power) p += 0.05;
+            stangaFata.setPower(p);
+            dreaptaSpate.setPower(p);
+
+//            if (stangaSpate.getCurrentPosition() >= 6 * distance / 7) {
+//                power /= 2;
+//                p /= 2;
+//            }
+
+        }
+
+        stopDriving();
     }
 
     public void rotateConstantSpeed(int degrees, double power, int timeout)

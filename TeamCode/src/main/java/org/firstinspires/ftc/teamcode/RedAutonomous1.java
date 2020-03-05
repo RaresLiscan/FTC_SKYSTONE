@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="Autonomie Rosu 5p")
+@Autonomous(name="Rosu 5p")
 @Disabled
 public class RedAutonomous1 extends LinearOpMode {
 
@@ -19,16 +19,14 @@ public class RedAutonomous1 extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            robot.runUsingEncoders(350, 0.6, 2);
+            robot.runUsingEncoders(350, 1, 2);
 
-            robot.strafe(1700, 0.6, 3);
+            robot.strafe(700, 0.6, 3);
 
-            robot.rotate(85, 1, 2);
+            robot.runUsingEncoders(-200, 1, 1);
 
-            robot.strafe(-450, 0.7, 2);
-
-            robot.ghearaDreapta.setPosition(0.87);
-            sleep(1000);
+            double correction = robot.maintainAngle();
+            robot.rotateEncoders(robot.conversieDegreesToTicks(correction - 90), 1, 1);
 
         }
 

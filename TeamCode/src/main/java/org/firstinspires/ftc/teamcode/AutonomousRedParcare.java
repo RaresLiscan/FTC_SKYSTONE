@@ -25,169 +25,144 @@ public class AutonomousRedParcare extends LinearOpMode {
 
 
     void rotateFundation() {
-        robot.ridicareBratStanga.setPower(0.8);
-        robot.ridicareBratDreapta.setPower(0.8);
-        sleep(900);
+
+        robot.macaraStangaEncoder(-95, 0.8, 2);
+        robot.macaraDreaptaEncoder(-70, 0.8, 2);
+
+        robot.ridicareBratStanga.setPower(1);
+        robot.ridicareBratDreapta.setPower(1);
+        sleep(600);
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-        robot.rotateConstantSpeed(-15, 0.7, 5);//15
+        robot.rotateConstantSpeed(-15, 0.6, 5);//15
 
-        robot.runUsingEncoders(-1550, 0.7, 5);//1800
+        robot.runUsingEncoders(-robot.conversieCmToTick(440), 1, 2);//1800
 
-        robot.rotateConstantSpeed(-70, 0.7, 5);//70
+        robot.rotateConstantSpeed(-61, 0.7, 5);//70
 
-        robot.runUsingEncoders(1300, 0.6, 5);//500
-        sleep(500);
+        robot.runUsingEncoders(robot.conversieCmToTick(520), 0.3, 2);//500
 
-        robot.ridicareBratDreapta.setPower(-0.8);
-        robot.ridicareBratStanga.setPower(-0.8);
-        sleep(900);
+        robot.ridicareBratDreapta.setPower(-1);
+        robot.ridicareBratStanga.setPower(-1);
+
+        robot.runUsingEncoders(-robot.conversieCmToTick(150), 1, 1);
+
         robot.ridicareBratStanga.setPower(0);
         robot.ridicareBratDreapta.setPower(0);
 
-//        robot.strafeCorrectionTest(500, 0.65, 3, telemetry);
+        robot.strafe(1200, 0.6, 3);
 
-        robot.runUsingEncoders(-800, 1, 2);
+        double correction = robot.maintainAngle();
+        robot.rotateEncoders(robot.conversieDegreesToTicks(correction), 1 ,1);
 
-        robot.strafe(1600, 0.7, 2);
+        robot.runUsingEncoders(-robot.conversieCmToTick(750), 1, 3);//3000
 
-        robot.runUsingEncoders(-2800, 1, 5);//3000
-
-//        robot.rotate(78, 0.7, 5);//-78
-//
-//        double correction = robot.checkDirection();
-//        robot.rotate((int) correction, 0.2, 2);
-
-        robot.ghearaDreapta.setPosition(0.87);
-        sleep(1000);
     }
 
 
     void skystoneRight() {
         telemetry.addData("Position: ", "right");
         telemetry.update();
-        //robot.runUsingEncoders(-100, 0.4,3);
 
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 85) {
-            robot.forward(-0.15);
-//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//            telemetry.update();
-        }
+        robot.runUsingEncoders(150, 0.75, 3);
 
-        robot.stopDriving();
-
-        robot.strafe(925, 0.65, 3);//1000
-        double correction = robot.checkDirection();
-        robot.rotate((int) correction, 0.2, 2);
-
-
-
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
-            robot.forward(0.15);
-//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//            telemetry.update();
-        }
-
-        robot.stopDriving();
-
-        robot.runUsingEncoders(400, 0.75, 3);
-        robot.ghearaStanga.setPosition(0);
+        robot.ghearaDreapta.setPosition(1);
         sleep(600);
+
         robot.ridicareBratStanga.setPower(-0.85);
+        robot.ridicareBratDreapta.setPower(-0.85);
         sleep(700);
         robot.ridicareBratStanga.setPower(0);
-        robot.runUsingEncoders(-800, 0.8, 3);
-        robot.rotate(-85, 1, 2);//-79
-        //robot.runUsingEncoders(7300, 1, 9);
-        robot.runUsingEncodersCorrection(robot.conversieCmToTick(1960), 1, 9);
+        robot.ridicareBratDreapta.setPower(0);
+
+        robot.runUsingEncoders(-200, 0.8, 3);
+        robot.rotateEncoders(-robot.conversieDegreesToTicks(90), 1, 2);
+
+        robot.runUsingEncodersCorrection(robot.conversieCmToTick(2230), 1, 9);
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
             robot.forward(0.3);
-//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//            telemetry.update();
         }
-        robot.stopDriving();
-        robot.rotate(88, 1, 3);
+        robot.rotateEncoders(robot.conversieDegreesToTicks(90), 1, 2);
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
-
-        //robot.runUsingEncoders(800, 0.4, 3);//550
-        robot.ghearaStanga.setPosition(0.5);
-        robot.macaraStangaEncoder(-95, 0.7, 2);
+        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick + 190), 0.3, 4);
+        robot.ghearaDreapta.setPosition(0.5);
         rotateFundation();
     }
 
     void skystoneLeft() {
-//        telemetry.addData("Position: ", "left");
-//        telemetry.update();
-        robot.runUsingEncoders(300,0.6, 3);
-        robot.ghearaStanga.setPosition(0);
-        sleep(600);
-        robot.ridicareBratStanga.setPower(-0.85);
-        sleep(700);
-        robot.ridicareBratStanga.setPower(0);
-        robot.runUsingEncoders(-700, 0.75, 3);
-        robot.rotate(-85, 1, 2);//
-        robot.runUsingEncodersCorrection(robot.conversieCmToTick(1980), 1, 9);
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
-            robot.forward(0.4);
-//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//            telemetry.update();
-        }
-        robot.rotate(88, 1, 3);//
-        conversieCmTick =robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 5);
+        telemetry.addData("Position: ", "left");
+        telemetry.update();
+        robot.runUsingEncoders(150,0.8, 3);
 
-        //robot.runUsingEncoders(800, 0.5, 3);//550
+        robot.ghearaStanga.setPosition(0);
+        sleep(300);
+        robot.ridicareBratStanga.setPower(-1);
+        robot.ridicareBratDreapta.setPower(-1);
+        sleep(500);
+        robot.ridicareBratStanga.setPower(0);
+        robot.ridicareBratDreapta.setPower(0);
+
+        robot.runUsingEncoders(-robot.conversieCmToTick(200), 1, 3);
+
+        robot.rotateEncoders(-robot.conversieDegreesToTicks(90), 0.7, 2);
+        robot.runUsingEncoders(robot.conversieCmToTick(2230), 1, 9);
+
+        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
+            robot.forward(0.3);
+        }
+
+        robot.rotateEncoders(robot.conversieDegreesToTicks(90), 0.7, 2);
+        conversieCmTick =robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
+        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick + 190), 0.35, 5);
         robot.ghearaStanga.setPosition(0.5);
-        robot.macaraStangaEncoder(-95, 0.7, 2);
         rotateFundation();
+
     }
 
     void noSkystone() {
         telemetry.addData("Position: ", "no skystone");
         telemetry.update();
-        robot.strafe(-910, 0.65, 3);//1000
-        double correction = robot.checkDirection();
-        robot.rotate((int) correction, 0.2, 2);
 
-//        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
-//            robot.forward(0.15);
-//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//            telemetry.update();
-//        }
-
-        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 65) {
-            robot.forward(-0.15);
-//            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//            telemetry.update();
+        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 75) {
+            robot.forward(-0.25);
         }
-        robot.stopDriving();
 
-        robot.runUsingEncoders(350, 0.8, 3);//
+        robot.strafe(-750, 0.6, 3);//-800, 1
+        double correction = robot.maintainAngle();
+        telemetry.addData("Corectia de unghi: ", correction);
+        telemetry.update();
+        robot.rotateEncoders(robot.conversieDegreesToTicks(correction - 3), 1, 1);
+
+        while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
+            robot.forward(0.25);
+        }
+
+
+        robot.runUsingEncoders(150, 0.8, 3);
         robot.ghearaStanga.setPosition(0);
-        sleep(600);
+        sleep(500);
+
         robot.ridicareBratStanga.setPower(-0.85);
-        sleep(700);
+        robot.ridicareBratDreapta.setPower(-0.85);
+
+        robot.runUsingEncoders(-200, 0.5, 3);
+
         robot.ridicareBratStanga.setPower(0);
-        robot.runUsingEncoders(-800, 0.8, 3);
-        robot.rotate(-85, 1, 2);
-        robot.runUsingEncodersCorrection(robot.conversieCmToTick(2000), 1, 9);
+        robot.ridicareBratDreapta.setPower(0);
+
+        robot.rotateEncoders(-robot.conversieDegreesToTicks(90), 1, 2);
+
+        robot.runUsingEncoders(robot.conversieCmToTick(2230), 1, 9);
+
         while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 350) {
-            robot.forward(0.4);
-            telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            telemetry.update();
+            robot.forward(0.35);
         }
-        robot.stopDriving();
-        robot.rotate(88, 1, 3);
 
+        robot.rotateEncoders(robot.conversieDegreesToTicks(90), 1, 2);
         conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.5, 4);
-
-        //robot.runUsingEncoders(800, 0.4, 3);//550
-
+        robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick + 190), 0.3, 4);
         robot.ghearaStanga.setPosition(0.5);
-        robot.macaraStangaEncoder(-95, 0.7, 2);
         rotateFundation();
 
     }
@@ -198,7 +173,7 @@ public class AutonomousRedParcare extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new RobotMap(hardwareMap, this);
-        robot.zeroPowerBeh();
+        //robot.zeroPowerBeh();
         waitForStart();
 
         telemetry.addData("Status: ", "ready");
@@ -208,35 +183,26 @@ public class AutonomousRedParcare extends LinearOpMode {
 
             robot.senzorStanga.enableLed(true);
             robot.senzorDreapta.enableLed(true);
-//            conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-//            conversieCmTick -= 60;
-//            telemetry.addData("Distance: ", conversieCmTick);
-//            telemetry.update();
             robot.ghearaStanga.setPosition(0.5);
+            robot.ghearaDreapta.setPosition(0.5);
             robot.ridicareBratStanga.setPower(0.5);
+            robot.ridicareBratDreapta.setPower(0.5);
             robot.scripeteStanga.setPower(0.4);
-            sleep(1000);
+            robot.scripeteDreapta.setPower(0.4);
+
+            robot.runUsingEncoders(robot.conversieCmToTick(620), 0.4, 4);
+
             robot.ridicareBratStanga.setPower(0);
             robot.scripeteStanga.setPower(0);
-            //robot.runUsingEncoders(2400, 0.6, 4);//2550
-//            sleep(1000);
-
-            robot.runUsingEncodersCorrection(robot.conversieCmToTick(700), 0.9, 4);
+            robot.ridicareBratDreapta.setPower(0);
+            robot.scripeteDreapta.setPower(0);
 
             while (robot.senzorDistanta.getDistance(DistanceUnit.MM) >= 65) {
-                robot.forward(0.15);
-//                 telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-//                 telemetry.update();
+                robot.forward(0.25);
             }
-
-            // while (robot.senzorDistanta.getDistance(DistanceUnit.MM) <= 75) {
-            //     robot.forward(-0.15);
-            //     telemetry.addData("mm", "%.2f mm", robot.senzorDistanta.getDistance(DistanceUnit.MM));
-            //     telemetry.update();
-            // }
             robot.stopDriving();
 
-            sleep(1000);
+            sleep(800);
 
             double rStanga = robot.senzorStanga.red();
             double gStanga = robot.senzorStanga.green();

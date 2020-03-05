@@ -7,12 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name = "TeleOP Albastru")
+@TeleOp(name = "TeleOP")
 @Disabled
-public class BlueTeleOP extends LinearOpMode {
+public class TeleOPFinal extends LinearOpMode {
 
     private RobotMap robot = null;
     private double DELAY = 0.2;
+
+    private double angle = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,9 +36,9 @@ public class BlueTeleOP extends LinearOpMode {
             double x = -gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
 
-            double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle()) - Math.PI / 2;
+            double direction = Math.atan2(x, y) - Math.toRadians(robot.getAngle()) + angle;
             double ipotenuse = Math.sqrt(x * x + y * y);
-            double rotate  = gamepad1.right_stick_x * 0.5;
+            double rotate  = gamepad1.right_stick_x * 0.65;
             double strafe  = Math.sin(direction) * ipotenuse;
             double forward = Math.cos(direction) * ipotenuse;
 
@@ -52,6 +54,7 @@ public class BlueTeleOP extends LinearOpMode {
             robot.dreaptaSpate.setPower(dS);
 
 
+
             //Ridicarea scripetelui din dreapta
             double raisePower = 0.8;
             int ticks = 1440;
@@ -62,6 +65,16 @@ public class BlueTeleOP extends LinearOpMode {
                 robot.scripeteDreapta.setPower(-raisePower);
             }
             else if (gamepad2.right_trigger == 0 && !gamepad2.right_bumper) robot.scripeteDreapta.setPower(0);
+
+            //Ridicarea scripetelui din stanga
+            if (gamepad1.left_bumper) {
+                robot.scripeteStanga.setPower(-raisePower);
+            }
+            else if (gamepad1.left_trigger != 0) {
+                robot.scripeteStanga.setPower(gamepad1.left_trigger);
+            }
+            else if (gamepad2.left_trigger == 0 && !gamepad2.left_bumper) robot.scripeteStanga.setPower(0);
+
 
 
             //Prinderea mineralului
@@ -84,30 +97,25 @@ public class BlueTeleOP extends LinearOpMode {
                 runtime.reset();
             }
 
-            //Ridicarea scripetelui din stanga
-            if (gamepad1.left_bumper) {
-                robot.scripeteStanga.setPower(-raisePower);
-            }
-            else if (gamepad1.left_trigger != 0) {
-//                robot.scripeteStanga.setPower(-raisePower * 0.3);
-                robot.scripeteStanga.setPower(gamepad1.left_trigger);
-            }
-            else if (gamepad2.left_trigger == 0 && !gamepad2.left_bumper) robot.scripeteStanga.setPower(0);
-
-
-
             //Resetare unghi
-            if (gamepad1.x){
-                robot.resetAngle();
+//            if (gamepad1.x){
+//                robot.resetAngle();
+//            }
+            if (gamepad1.dpad_left) {
+                angle = Math.PI / 2;
+            }
+            if (gamepad1.dpad_right) {
+                angle = -Math.PI / 2;
+            }
+            if (gamepad1.dpad_up) {
+                angle = 0;
             }
 
             if (gamepad1.b) {
                 robot.ghearaDreapta.setPosition(0);
             }
 
-
             /** GAMEPAD 2 */
-
 
             //Bascularea bratelor
             robot.ridicareBratDreapta.setPower(-gamepad2.right_stick_y * 0.9);
@@ -127,6 +135,7 @@ public class BlueTeleOP extends LinearOpMode {
                 robot.scripeteStanga.setPower(-raisePower);
             }
             else if (gamepad2.left_trigger != 0) {
+//                robot.scripeteStanga.setPower(-raisePower);
                 robot.scripeteStanga.setPower(gamepad2.left_trigger);
             }
             else if (gamepad1.left_trigger == 0 && !gamepad1.left_bumper) robot.scripeteStanga.setPower(0);

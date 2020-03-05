@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name = "Test rotire encoders")
+@Autonomous(name="Bag in el strafe")
 @Disabled
-public class TestAuto extends LinearOpMode {
+public class StrafeTest extends LinearOpMode {
 
     RobotMap robot = null;
 
@@ -15,20 +15,10 @@ public class TestAuto extends LinearOpMode {
         robot = new RobotMap(hardwareMap, this);
         waitForStart();
 
-        if (opModeIsActive()) {
-
-            robot.resetAngle();
-            telemetry.addData("Initial angle: ", robot.getAngle());
-            telemetry.update();
-
-            robot.rotateEncoders(1200, 1, 3);
+        while (opModeIsActive()) {
+            robot.strafe(-800, 0.5, 30);
 
             sleep(1000);
-
-            telemetry.addData("Angle: ", robot.getAngle());
-            telemetry.update();
-
-            sleep(10000);
         }
     }
 }

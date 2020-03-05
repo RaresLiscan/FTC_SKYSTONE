@@ -20,43 +20,46 @@ public class DragPlatformBlueRotateParcare extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            robot.runUsingEncoders(300, 0.7, 2);
+            robot.runUsingEncoders(robot.conversieCmToTick(100), 1, 1);
 
-            robot.strafe(-1600, 0.7, 3);//1700
+            robot.strafe(-870, 0.6, 2);//1700
 
-            robot.runUsingEncoders(3000, 0.4, 5);//2600
+            double correction = robot.maintainAngle();
+            robot.rotateEncoders(robot.conversieDegreesToTicks(correction + 4), 1, 1);
+
+            robot.runUsingEncoders(robot.conversieCmToTick(700), 1, 3);//2600
 
             double conversieCmTick = robot.senzorDistantaRev.getDistance(DistanceUnit.MM);
-            robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.4, 4);
+            robot.runUsingEncoders(robot.conversieCmToTick(conversieCmTick), 0.3, 3);
 
             robot.ridicareBratStanga.setPower(0.8);
             robot.ridicareBratDreapta.setPower(0.8);
-            sleep(1000);
+            sleep(700);
+            robot.ridicareBratStanga.setPower(0);
+            robot.ridicareBratDreapta.setPower(0);
+//
+            robot.rotateConstantSpeed(15, 1, 1);
+
+            robot.runUsingEncoders(-robot.conversieCmToTick(410), 1, 2);//1800
+//
+            robot.rotateConstantSpeed(61, 1, 3);
+//
+            robot.runUsingEncoders(robot.conversieCmToTick(300), 0.5, 2);//500
+//
+            robot.ridicareBratDreapta.setPower(-0.85);
+            robot.ridicareBratStanga.setPower(-0.85);
+//
+            robot.runUsingEncoders(-robot.conversieCmToTick(100), 1, 3);
+
             robot.ridicareBratStanga.setPower(0);
             robot.ridicareBratDreapta.setPower(0);
 
-            robot.rotateConstantSpeed(15, 0.4, 5);
+            robot.strafe(-1200, 1, 1);
 
-            robot.runUsingEncoders(-1800, 0.4, 5);//1800
+            correction = robot.maintainAngle();
+            robot.rotateEncoders(robot.conversieDegreesToTicks(correction + 2), 1, 1);
 
-            robot.rotateConstantSpeed(70, 0.4, 5);
-
-            robot.runUsingEncoders(700, 0.4, 5);//500
-
-            robot.ridicareBratDreapta.setPower(-0.8);
-            robot.ridicareBratStanga.setPower(-0.8);
-            sleep(1000);
-            robot.ridicareBratStanga.setPower(0);
-            robot.ridicareBratDreapta.setPower(0);
-
-            robot.runUsingEncoders(-300, 0.7, 3);
-
-            robot.strafe(-1600, 0.7, 2);
-
-            robot.runUsingEncoders(-3350, 0.7, 5);//3000
-
-            robot.ghearaStanga.setPosition(0.23);
-            sleep(1000);
+            robot.runUsingEncoders(-robot.conversieCmToTick(900), 1, 3);//3000
         }
 
     }
