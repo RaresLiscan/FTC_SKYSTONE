@@ -81,15 +81,17 @@ public class SkystoneDetectionOpMode extends LinearOpMode {
             /*
              * Send some stats to the telemetry
              */
-//            telemetry.addData("Stone Position X", skyStoneDetector.getScreenPosition().x);
-//            telemetry.addData("Stone Position Y", skyStoneDetector.getScreenPosition().y);
+            telemetry.addData("Stone Position X", skyStoneDetector.getScreenPosition().x);
+            telemetry.addData("Stone Position Y", skyStoneDetector.getScreenPosition().y);
 //            telemetry.addData("Frame Count", phoneCam.getFrameCount());
 //            telemetry.addData("FPS", String.format(Locale.US, "%.2f", phoneCam.getFps()));
 //            telemetry.addData("Total frame time ms", phoneCam.getTotalFrameTimeMs());
 //            telemetry.addData("Pipeline time ms", phoneCam.getPipelineTimeMs());
 //            telemetry.addData("Overhead time ms", phoneCam.getOverheadTimeMs());
 //            telemetry.addData("Theoretical max FPS", phoneCam.getCurrentPipelineMaxFps());
-//            telemetry.update();
+            telemetry.addData("Skystone Position X: ", skyStoneDetector.foundRectangle().x);
+            telemetry.addData("Skystone position Y: ", skyStoneDetector.foundRectangle().y);
+            telemetry.update();
 
             /*
              * NOTE: stopping the stream from the camera early (before the end of the OpMode
