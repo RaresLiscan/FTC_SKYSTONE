@@ -22,7 +22,6 @@ import java.util.Locale;
  * Derived Work Copyright(c) 2019 DogeDevs
  */
 @TeleOp(name = "Skystone Detector OpMode")
-
 public class SkystoneDetectionOpMode extends LinearOpMode {
     private OpenCvCamera phoneCam;
     private SkystoneDetectorTesting skyStoneDetector;

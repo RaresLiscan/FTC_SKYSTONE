@@ -47,8 +47,8 @@ public class SkystoneDetectorTesting extends DogeCVDetector {
 
     private int x = 85;
     private int y = 80;
-    private int width = 240;
-    private int height = 70;
+    private int width = 5;
+    private int height = 5;
 
     private Telemetry telemetry;
 

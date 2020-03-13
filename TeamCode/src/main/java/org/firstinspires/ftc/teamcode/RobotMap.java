@@ -39,7 +39,7 @@ public class RobotMap {
     public ColorSensor senzorStanga;
     public ColorSensor senzorDreapta;
     public ModernRoboticsI2cRangeSensor senzorDistanta;
-    public Rev2mDistanceSensor senzorFataStanga;
+    //public Rev2mDistanceSensor senzorFataStanga;
     public Rev2mDistanceSensor senzorFataDreapta;
     public Rev2mDistanceSensor senzorLateralaStanga;
     public Rev2mDistanceSensor senzorLateralaDreapta;
@@ -68,10 +68,10 @@ public class RobotMap {
         senzorStanga = hardwareMap.get(ColorSensor.class, "senzorSt");
         senzorDreapta.enableLed(false);
         senzorStanga.enableLed(false);
-//        senzorDistanta = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "senzorDistanta");
+        senzorDistanta = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "senzorDistanta");
 //        senzorDistantaRev = hardwareMap.get(Rev2mDistanceSensor.class, "senzorDistantaRev");
         senzorFataDreapta = hardwareMap.get(Rev2mDistanceSensor.class, "senzorFataDreapta");
-        senzorFataStanga = hardwareMap.get(Rev2mDistanceSensor.class, "senzorFataStanga");
+        //senzorFataStanga = hardwareMap.get(Rev2mDistanceSensor.class, "senzorFataStanga");
         senzorLateralaDreapta = hardwareMap.get(Rev2mDistanceSensor.class, "senzorLateralaDreapta");
         senzorLateralaStanga = hardwareMap.get(Rev2mDistanceSensor.class, "senzorLateralaStanga");
 
@@ -306,10 +306,74 @@ public class RobotMap {
 
         while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
             if (p < power) p += 0.05;
+
             stangaFata.setPower(p);
             stangaSpate.setPower(p);
             dreaptaFata.setPower(p);
             dreaptaSpate.setPower(p);
+
+//            if (stangaSpate.getCurrentPosition() >= 6 * distance / 7) {
+//                power /= 2;
+//                p /= 2;
+//            }
+
+        }
+
+        stopDriving();
+
+    }
+
+    public double percent(double actual, double total){
+        return 100 * actual / total;
+    }
+
+    public void runUsingEncodersDecreaseSpeed (int distance, double power, double timeout) {
+        ElapsedTime runtime = new ElapsedTime();
+
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
+
+        stangaFata.setTargetPosition(-distance);
+        stangaSpate.setTargetPosition(-distance);
+        dreaptaFata.setTargetPosition(distance);
+        dreaptaSpate.setTargetPosition(distance);
+
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double p = 0.05;
+
+        stangaFata.setPower(p);
+        stangaSpate.setPower(p);
+        dreaptaFata.setPower(p);
+        dreaptaSpate.setPower(p);
+
+        runtime.reset();
+        boolean decreased = false;
+
+        while (opMode.opModeIsActive() && stangaSpate.isBusy() && stangaFata.isBusy() && dreaptaSpate.isBusy() && dreaptaFata.isBusy() && runtime.seconds() < timeout) {
+            if (p < power && !decreased) p += 0.05;
+
+            if (percent(dreaptaFata.getCurrentPosition(), distance) >= 80 && !decreased) {
+                decreased = true;
+                power /= 2;
+                p /= 2;
+            }
+
+            stangaFata.setPower(p);
+            stangaSpate.setPower(p);
+            dreaptaFata.setPower(p);
+            dreaptaSpate.setPower(p);
+
+            opMode.telemetry.addData("Percent: ", percent(dreaptaFata.getCurrentPosition(), distance));
+            opMode.telemetry.addData("Power: ", p);
+            opMode.telemetry.update();
 
 //            if (stangaSpate.getCurrentPosition() >= 6 * distance / 7) {
 //                power /= 2;
@@ -606,10 +670,10 @@ public class RobotMap {
         dreaptaFata.setPower(0);
         dreaptaSpate.setPower(0);
 
-        stangaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        stangaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        stangaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        stangaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void resetAngle()
@@ -805,7 +869,7 @@ public class RobotMap {
         dreaptaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         runtime.reset();
-        while (senzorFataStanga.getDistance(DistanceUnit.CM) > targetDistance && senzorFataDreapta.getDistance(DistanceUnit.CM) > targetDistance && runtime.seconds() < timeout) {
+        while (senzorFataDreapta.getDistance(DistanceUnit.CM) > targetDistance && runtime.seconds() < timeout) {
             stangaFata.setPower(-power);
             dreaptaFata.setPower(power);
             stangaSpate.setPower(-power);
@@ -854,6 +918,92 @@ public class RobotMap {
         stopDriving();
     }
 
+    public void rotateCurbatDreapta(int distance, double power, double timeout){
+        ElapsedTime runtime = new ElapsedTime();
+
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
+
+        stangaSpate.setTargetPosition(-distance);
+        stangaFata.setTargetPosition(-distance);
+        dreaptaSpate.setTargetPosition(0);
+        dreaptaFata.setTargetPosition(0);
+
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double p = 0.05;
+
+        stangaFata.setPower(p);
+        stangaSpate.setPower(p);
+        dreaptaFata.setPower(0);
+        dreaptaSpate.setPower(0);
+
+        runtime.reset();
+
+        while (opMode.opModeIsActive() && stangaFata.isBusy() /*&& dreaptaFata.isBusy()*/ && stangaSpate.isBusy() /*&& dreaptaSpate.isBusy()*/ && runtime.seconds() < timeout) {
+            if (p < power) p += 0.05;
+
+            stangaFata.setPower(p);
+            stangaSpate.setPower(p);
+            dreaptaFata.setPower(p * 1/2);
+            dreaptaSpate.setPower(p * 1/2);
+        }
+
+        stopDriving();
+
+    }
+
+    public void rotateCurbatStanga(int distance, double power, double timeout){
+        ElapsedTime runtime = new ElapsedTime();
+
+        stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opMode.sleep(50);
+
+        stangaSpate.setTargetPosition(0);
+        stangaFata.setTargetPosition(0);
+        dreaptaSpate.setTargetPosition(distance);
+        dreaptaFata.setTargetPosition(distance);
+
+        stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double p = 0.05;
+
+        stangaFata.setPower(0);
+        stangaSpate.setPower(0);
+        dreaptaFata.setPower(p);
+        dreaptaSpate.setPower(p);
+
+        runtime.reset();
+
+        while (opMode.opModeIsActive() /*&& stangaFata.isBusy()*/ && dreaptaFata.isBusy() /*&& stangaSpate.isBusy()*/ && dreaptaSpate.isBusy() && runtime.seconds() < timeout) {
+            if (p < power) p += 0.05;
+
+            stangaFata.setPower(p * 1/2);
+            stangaSpate.setPower(p * 1/2);
+            dreaptaFata.setPower(p);
+            dreaptaSpate.setPower(p);
+        }
+
+        stopDriving();
+
+    }
+
+
+
     public void drive45degreeDreapta(int distance, double power, double timeout){
         ElapsedTime runtime = new ElapsedTime();
 
@@ -899,6 +1049,8 @@ public class RobotMap {
 
         stopDriving();
     }
+
+
 
     public void rotateConstantSpeed(int degrees, double power, int timeout)
     {

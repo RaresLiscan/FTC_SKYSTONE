@@ -55,7 +55,7 @@ public class AutonomousRed extends LinearOpMode {
 
 //        robot.strafe(-250, 1, 2);
 
-        robot.runUsingEncoders(-robot.conversieCmToTick(900), 1, 3);//3000
+        robot.runUsingEncoders(-robot.conversieCmToTick(950), 1, 3);//3000
 
 //        robot.ghearaDreapta.setPosition(0.87);
 //        sleep(1000);
@@ -129,7 +129,7 @@ public class AutonomousRed extends LinearOpMode {
             robot.forward(-0.25);
         }
 
-        robot.strafe(-750, 0.6, 3);//-800, 1
+        robot.strafe(-525, 0.6, 3);//-800, 1
         double correction = robot.maintainAngle();
         telemetry.addData("Corectia de unghi: ", correction);
         telemetry.update();
